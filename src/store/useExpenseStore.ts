@@ -7,6 +7,11 @@ interface ExpenseState {
     expenses: Expense[];
     // Actions
     addExpense: (expense: Omit<Expense, 'id' | 'createdAt'>) => void;
+    updateExpense: (id: string, expense: Partial<Omit<Expense, 'id' | 'createdAt'>>) => void;
+    deleteExpense: (id: string) => void;
+    addMember: (member: Omit<Member, 'id'>) => void;
+    updateMember: (id: string, member: Partial<Omit<Member, 'id'>>) => void;
+    deleteMember: (id: string) => { success: boolean; message?: string };
 }
 
 // Giả lập Mock Data cho MVP
@@ -18,7 +23,7 @@ const mockMembers: Member[] = [
     { id: "m-3", groupId: MOCK_GROUP_ID, name: "C" },
 ];
 
-export const useExpenseStore = create<ExpenseState>((set) => ({
+export const useExpenseStore = create<ExpenseState>((set, get) => ({
     group: {
         id: MOCK_GROUP_ID,
         name: "Trọ Quận 7",
@@ -70,4 +75,50 @@ export const useExpenseStore = create<ExpenseState>((set) => ({
                 },
             ],
         })),
+    updateExpense: (id, expenseData) =>
+        set((state) => ({
+            expenses: state.expenses.map((e) =>
+                e.id === id ? { ...e, ...expenseData } : e
+            ),
+        })),
+    deleteExpense: (id) =>
+        set((state) => ({
+            expenses: state.expenses.filter((e) => e.id !== id),
+        })),
+    addMember: (memberData) =>
+        set((state) => ({
+            members: [
+                ...state.members,
+                {
+                    ...memberData,
+                    id: `m-${Date.now()}`,
+                },
+            ],
+        })),
+    updateMember: (id, memberData) =>
+        set((state) => ({
+            members: state.members.map((m) =>
+                m.id === id ? { ...m, ...memberData } : m
+            ),
+        })),
+    deleteMember: (id) => {
+        const state = get();
+        // Kiểm tra xem thành viên có liên quan đến khoản chi nào không
+        const isRelated = state.expenses.some(
+            (e) => e.payerId === id
+        );
+
+        if (isRelated) {
+            return {
+                success: false,
+                message: "Không thể xóa thành viên này vì họ đã tham gia chi tiêu."
+            };
+        }
+
+        set((state) => ({
+            members: state.members.filter((m) => m.id !== id),
+        }));
+
+        return { success: true };
+    },
 }));
