@@ -10,7 +10,8 @@ interface ExpenseState {
     error: string | null;
 
     // Actions
-    fetchData: () => Promise<void>;
+    fetchData: (groupId: string) => Promise<void>;
+    createGroup: (name: string) => Promise<Group | null>;
     addExpense: (expense: Omit<Expense, 'id' | 'createdAt'>) => Promise<void>;
     updateExpense: (id: string, expense: Partial<Omit<Expense, 'id' | 'createdAt'>>) => Promise<void>;
     deleteExpense: (id: string) => Promise<void>;
@@ -45,38 +46,55 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
     isLoading: true,
     error: null,
 
-    fetchData: async () => {
-        set({ isLoading: true, error: null });
+    fetchData: async (groupId: string) => {
+        set({ isLoading: true, error: null, members: [], expenses: [], group: null });
         try {
-            // Lấy Group đầu tiên (mặc định)
-            const { data: groups, error: groupErr } = await supabase.from('groups').select('*').limit(1);
+            const { data: groupData, error: groupErr } = await supabase
+                .from('groups')
+                .select('*')
+                .eq('id', groupId)
+                .single();
+
             if (groupErr) throw groupErr;
-            const currentGroup = groups && groups.length > 0 ? {
-                id: groups[0].id,
-                name: groups[0].name,
-                createdAt: groups[0].created_at
-            } : null;
 
-            if (currentGroup) {
-                const [membersRes, expensesRes] = await Promise.all([
-                    supabase.from('members').select('*').eq('group_id', currentGroup.id).order('created_at', { ascending: true }),
-                    supabase.from('expenses').select('*').eq('group_id', currentGroup.id).order('created_at', { ascending: false })
-                ]);
+            const currentGroup: Group = {
+                id: groupData.id,
+                name: groupData.name,
+                createdAt: groupData.created_at,
+            };
 
-                if (membersRes.error) throw membersRes.error;
-                if (expensesRes.error) throw expensesRes.error;
+            const [membersRes, expensesRes] = await Promise.all([
+                supabase.from('members').select('*').eq('group_id', groupId).order('created_at', { ascending: true }),
+                supabase.from('expenses').select('*').eq('group_id', groupId).order('created_at', { ascending: false })
+            ]);
 
-                set({
-                    group: currentGroup,
-                    members: membersRes.data.map(mapMember),
-                    expenses: expensesRes.data.map(mapExpense),
-                    isLoading: false
-                });
-            } else {
-                set({ isLoading: false });
-            }
+            if (membersRes.error) throw membersRes.error;
+            if (expensesRes.error) throw expensesRes.error;
+
+            set({
+                group: currentGroup,
+                members: membersRes.data.map(mapMember),
+                expenses: expensesRes.data.map(mapExpense),
+                isLoading: false
+            });
         } catch (err: any) {
             set({ error: err.message, isLoading: false });
+        }
+    },
+
+    createGroup: async (name: string) => {
+        try {
+            const { data, error } = await supabase
+                .from('groups')
+                .insert({ name })
+                .select()
+                .single();
+            if (error) throw error;
+            const newGroup: Group = { id: data.id, name: data.name, createdAt: data.created_at };
+            return newGroup;
+        } catch (err: any) {
+            console.error('Error creating group:', err);
+            return null;
         }
     },
 

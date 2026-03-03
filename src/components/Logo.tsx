@@ -1,0 +1,45 @@
+export function Logo({ className }: { className?: string }) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" className={className}>
+            {/* Nền đen nhám (Dark Charcoal) sang trọng */}
+            <rect width="200" height="200" rx="40" fill="#1E1E1E" />
+
+            {/* Phần đầu và tai mèo (Trắng tinh) */}
+            <path d="M 60 90 L 50 40 L 80 65 Q 100 60 120 65 L 150 40 L 140 90 Z" fill="#ffffff" />
+
+            {/* Lòng tai (Xám vừa) */}
+            <path d="M 65 80 L 58 52 L 80 68" fill="#999999" />
+            <path d="M 135 80 L 142 52 L 120 68" fill="#999999" />
+
+            {/* Đôi mắt tập trung tính tiền (Đen) */}
+            <circle cx="80" cy="85" r="8" fill="#1E1E1E" />
+            <circle cx="120" cy="85" r="8" fill="#1E1E1E" />
+
+            {/* Chiếc mũi lấp ló (Xám đậm) */}
+            <polygon points="96,93 104,93 100,98" fill="#666666" />
+
+            {/* Tờ hóa đơn (Bill) màu xám sáng để nổi bật trên nền đen */}
+            <path d="M 45 100 L 155 100 L 155 180 L 140 170 L 125 180 L 110 170 L 95 180 L 80 170 L 65 180 L 50 170 L 45 180 Z" fill="#EEEEEE" />
+
+            {/* Các dòng text trên Bill (Xám) */}
+            <rect x="70" y="115" width="60" height="5" fill="#AAAAAA" rx="2.5" />
+            <rect x="70" y="125" width="45" height="5" fill="#AAAAAA" rx="2.5" />
+            <rect x="70" y="135" width="55" height="5" fill="#AAAAAA" rx="2.5" />
+
+            {/* Đường nét đứt (cắt bill) (Đen) */}
+            <line x1="45" y1="150" x2="140" y2="150" stroke="#1E1E1E" strokeWidth="3" strokeDasharray="8,6" strokeLinecap="round" />
+
+            {/* Biểu tượng % (Nền đen, chữ trắng) */}
+            <g transform="translate(150, 150)">
+                <circle cx="0" cy="0" r="16" fill="#1E1E1E" />
+                <line x1="-6" y1="6" x2="6" y2="-6" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
+                <circle cx="-5" cy="-4" r="2.5" fill="#ffffff" />
+                <circle cx="5" cy="4" r="2.5" fill="#ffffff" />
+            </g>
+
+            {/* Hai bàn chân mèo (Trắng, có viền xám nhạt để không bị lẫn vào hóa đơn) */}
+            <ellipse cx="40" cy="110" rx="16" ry="11" fill="#ffffff" stroke="#CCCCCC" strokeWidth="2" transform="rotate(20 40 110)" />
+            <ellipse cx="160" cy="110" rx="16" ry="11" fill="#ffffff" stroke="#CCCCCC" strokeWidth="2" transform="rotate(-20 160 110)" />
+        </svg>
+    );
+}

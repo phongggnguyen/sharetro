@@ -8,7 +8,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-    title: "Expense Splitter",
+    title: "No Debt",
     description: "Ứng dụng chia tiền trọ công bằng, nhanh chóng",
 };
 
