@@ -9,7 +9,7 @@ import AddExpenseModal from "@/components/expenses/AddExpenseModal";
 import SettlementView from "@/components/expenses/SettlementView";
 import MemberList from "@/components/members/MemberList";
 import MemberModal from "@/components/members/MemberModal";
-import { Plus, ListOrdered, Calculator, Users, ArrowLeft } from "lucide-react";
+import { Plus, ListOrdered, Calculator, Users, ArrowLeft, Copy, Check } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 type Tab = "expenses" | "settlement" | "members";
@@ -44,6 +44,13 @@ export default function GroupPage() {
     const [activeTab, setActiveTab] = useState<Tab>("expenses");
     const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
     const [editingMember, setEditingMember] = useState<Member | null>(null);
+    const [copied, setCopied] = useState(false);
+
+    const handleCopyId = () => {
+        navigator.clipboard.writeText(groupId);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     useEffect(() => {
         if (groupId) {
@@ -124,7 +131,19 @@ export default function GroupPage() {
                         <Logo className="w-full h-full object-contain" />
                     </div>
                     <div>
-                        <h1 className="text-3xl font-black tracking-tighter uppercase text-slate-900 leading-none">{group.name}</h1>
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-3xl font-black tracking-tighter uppercase text-slate-900 leading-none">{group.name}</h1>
+                            <button
+                                onClick={handleCopyId}
+                                title="Copy ID nhóm"
+                                className={`shrink-0 flex items-center justify-center w-7 h-7 border-2 transition-all duration-150 ${copied
+                                        ? "border-emerald-600 bg-emerald-50 text-emerald-600 shadow-none translate-x-px translate-y-px"
+                                        : "border-slate-900 bg-white text-slate-500 shadow-[2px_2px_0_0_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-px hover:translate-y-px hover:text-slate-900"
+                                    }`}
+                            >
+                                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                            </button>
+                        </div>
                         <p className="text-slate-500 font-bold text-xs mt-1 uppercase tracking-widest">
                             {members.length} thành viên · {expenses.length} khoản chi
                         </p>
