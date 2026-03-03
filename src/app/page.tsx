@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useExpenseStore } from "@/store/useExpenseStore";
 import { Expense } from "@/types";
 import ExpenseList from "@/components/expenses/ExpenseList";
@@ -23,6 +23,13 @@ export default function Home() {
     const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
     const [editingMember, setEditingMember] = useState<Member | null>(null);
 
+    const fetchData = useExpenseStore((state) => state.fetchData);
+    const isLoading = useExpenseStore((state) => state.isLoading);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
     const handleEdit = (expense: Expense) => {
         setEditingExpense(expense);
         setIsAddModalOpen(true);
@@ -44,6 +51,16 @@ export default function Home() {
     };
 
     const totalAmount = expenses.reduce((sum, e) => sum + e.amount, 0);
+
+    if (isLoading) {
+        return (
+            <main className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-900">
+                <div className="font-black text-2xl uppercase tracking-widest animate-pulse border-4 border-slate-900 p-8 shadow-[8px_8px_0_0_rgba(15,23,42,1)] bg-white">
+                    Đang tải dữ liệu...
+                </div>
+            </main>
+        );
+    }
 
     return (
         <main className="flex min-h-screen flex-col bg-white text-slate-900 relative selection:bg-black selection:text-white">
