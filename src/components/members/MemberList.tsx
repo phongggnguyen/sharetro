@@ -14,9 +14,9 @@ export default function MemberList({ onEdit }: MemberListProps) {
     const members = useExpenseStore((state) => state.members);
     const deleteMember = useExpenseStore((state) => state.deleteMember);
 
-    const handleDelete = (id: string, name: string) => {
+    const handleDelete = async (id: string, name: string) => {
         if (confirm(`Bạn có chắc chắn muốn xóa thành viên "${name}" không?`)) {
-            const result = deleteMember(id);
+            const result = await deleteMember(id);
             if (!result.success) {
                 alert(result.message);
             }
