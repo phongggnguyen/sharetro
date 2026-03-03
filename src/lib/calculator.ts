@@ -59,9 +59,9 @@ export function calculateBalances(
     }
 
     // Tính Balance cuối cùng
-    for (const [, mb] of balanceMap) {
+    balanceMap.forEach((mb) => {
         mb.balance = mb.totalPaid - mb.totalOwed;
-    }
+    });
 
     const result = Array.from(balanceMap.values());
 
