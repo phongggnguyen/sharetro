@@ -7,12 +7,34 @@ import { formatCurrency } from "@/lib/utils";
 import { ArrowRight, QrCode, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import QRModal from "@/components/expenses/QRModal";
+import SettleModal from "@/components/expenses/SettleModal";
 import { Member } from "@/types";
+import { useEffect } from "react";
 
 export default function SettlementView() {
     const members = useExpenseStore((state) => state.members);
     const expenses = useExpenseStore((state) => state.expenses);
     const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
+    const [isSettleModalOpen, setIsSettleModalOpen] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [adminToken, setAdminToken] = useState("");
+
+    const groupId = useExpenseStore((state) => state.group?.id);
+
+    useEffect(() => {
+        if (typeof window !== "undefined" && groupId) {
+            try {
+                const rawKeys = localStorage.getItem("sharetien_admin_keys");
+                if (rawKeys) {
+                    const keys = JSON.parse(rawKeys);
+                    if (keys[groupId]) {
+                        setIsAdmin(true);
+                        setAdminToken(keys[groupId]);
+                    }
+                }
+            } catch (e) { }
+        }
+    }, [groupId]);
 
     const { balances, transactions } = calculateSettlements(members, expenses);
     const totalAmount = expenses.reduce((sum, e) => sum + e.amount, 0);
@@ -23,6 +45,25 @@ export default function SettlementView() {
 
     return (
         <div className="w-full flex flex-col gap-8">
+            {/* Chốt sổ Header */}
+            {isAdmin && expenses.length > 0 && (
+                <div className="bg-emerald-50 border-4 border-emerald-600 p-6 shadow-[8px_8px_0_0_rgba(5,150,105,1)] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <h3 className="font-black text-xl text-emerald-900 uppercase tracking-widest mb-1 flex items-center gap-2">
+                            <span className="w-3 h-3 bg-emerald-900" />
+                            Sẵn sàng chốt sổ
+                        </h3>
+                        <p className="text-sm font-bold text-emerald-700 uppercase tracking-widest">Bạn là quản trị viên của nhóm này.</p>
+                    </div>
+                    <Button
+                        onClick={() => setIsSettleModalOpen(true)}
+                        className="rounded-none h-14 px-8 text-base font-black uppercase tracking-widest border-2 border-emerald-900 shadow-[4px_4px_0_0_rgba(6,78,59,1)] hover:shadow-none hover:translate-y-1 hover:translate-x-1 transition-all bg-emerald-500 hover:bg-emerald-400 text-emerald-950"
+                    >
+                        Chốt sổ ngay
+                    </Button>
+                </div>
+            )}
+
             {/* Tổng quát */}
             <div className="bg-white border-4 border-slate-900 p-6 shadow-[8px_8px_0_0_rgba(15,23,42,1)] relative">
                 <h3 className="font-black text-lg text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2 border-b-2 border-slate-900 pb-2">
@@ -132,6 +173,14 @@ export default function SettlementView() {
                     onClose={() => setSelectedTx(null)}
                 />
             )}
+
+            {/* Settle Modal */}
+            <SettleModal
+                isOpen={isSettleModalOpen}
+                onClose={() => setIsSettleModalOpen(false)}
+                isAdmin={isAdmin}
+                adminToken={adminToken}
+            />
         </div>
     );
 }

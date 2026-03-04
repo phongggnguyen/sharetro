@@ -9,6 +9,7 @@ interface SettlementRecord {
     id: string;
     group_id: string;
     period_date: string;
+    period_name: string;
     from_member_id: string;
     from_member_name: string;
     to_member_id: string;
@@ -48,12 +49,14 @@ export default function HistoryPage() {
         if (groupId) fetchHistory();
     }, [groupId]);
 
-    // Group by period_date
+    // Group by period_name (or fallback to period_date if period_name is somehow missing)
     const groupedRecords = records.reduce((acc, record) => {
-        const date = new Date(record.period_date);
-        const monthYear = `Tháng ${date.getMonth() + 1}/${date.getFullYear()}`;
-        if (!acc[monthYear]) acc[monthYear] = [];
-        acc[monthYear].push(record);
+        const key = record.period_name || (() => {
+            const date = new Date(record.period_date);
+            return `Tháng ${date.getMonth() + 1}/${date.getFullYear()}`;
+        })();
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(record);
         return acc;
     }, {} as Record<string, SettlementRecord[]>);
 
@@ -105,11 +108,11 @@ export default function HistoryPage() {
                         </p>
                     </div>
                 ) : (
-                    Object.entries(groupedRecords).map(([monthYear, periodRecords]) => (
-                        <div key={monthYear} className="flex flex-col gap-3">
+                    Object.entries(groupedRecords).map(([periodName, periodRecords]) => (
+                        <div key={periodName} className="flex flex-col gap-3">
                             <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 flex items-center gap-2">
                                 <span className="w-4 h-1 bg-emerald-400 inline-block border border-slate-900"></span>
-                                {monthYear}
+                                {periodName}
                             </h2>
                             <div className="bg-white border-2 border-slate-900 p-4 shadow-[4px_4px_0_0_rgba(15,23,42,1)] flex flex-col gap-3">
                                 {periodRecords.map(record => (

@@ -1,6 +1,8 @@
 export interface Group {
     id: string;
     name: string;
+    adminToken?: string;
+    creatorName?: string;
     createdAt: string;
 }
 

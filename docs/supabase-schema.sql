@@ -10,6 +10,8 @@ DROP TABLE IF EXISTS groups CASCADE;
 CREATE TABLE groups (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
+  admin_token UUID DEFAULT gen_random_uuid() NOT NULL,
+  creator_name TEXT NOT NULL DEFAULT 'Admin',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 
@@ -38,6 +40,7 @@ CREATE TABLE settlement_history (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     group_id UUID REFERENCES groups(id) ON DELETE CASCADE,
     period_date DATE NOT NULL,
+    period_name TEXT NOT NULL,
     from_member_id UUID NOT NULL,
     from_member_name TEXT NOT NULL,
     to_member_id UUID NOT NULL,

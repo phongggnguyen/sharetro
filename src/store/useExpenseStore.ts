@@ -11,7 +11,7 @@ interface ExpenseState {
 
     // Actions
     fetchData: (groupId: string) => Promise<void>;
-    createGroup: (name: string) => Promise<Group | null>;
+    createGroup: (name: string, creatorName: string) => Promise<Group | null>;
     addExpense: (expense: Omit<Expense, 'id' | 'createdAt'>) => Promise<void>;
     updateExpense: (id: string, expense: Partial<Omit<Expense, 'id' | 'createdAt'>>) => Promise<void>;
     deleteExpense: (id: string) => Promise<void>;
@@ -60,6 +60,8 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
             const currentGroup: Group = {
                 id: groupData.id,
                 name: groupData.name,
+                adminToken: groupData.admin_token,
+                creatorName: groupData.creator_name,
                 createdAt: groupData.created_at,
             };
 
@@ -82,15 +84,40 @@ export const useExpenseStore = create<ExpenseState>((set, get) => ({
         }
     },
 
-    createGroup: async (name: string) => {
+    createGroup: async (name: string, creatorName: string) => {
         try {
             const { data, error } = await supabase
                 .from('groups')
-                .insert({ name })
+                .insert({ name, creator_name: creatorName })
                 .select()
                 .single();
             if (error) throw error;
-            const newGroup: Group = { id: data.id, name: data.name, createdAt: data.created_at };
+
+            // Lưu admin_token vào localStorage
+            if (typeof window !== 'undefined' && data.admin_token) {
+                try {
+                    const rawKeys = localStorage.getItem('sharetien_admin_keys');
+                    const keys = rawKeys ? JSON.parse(rawKeys) : {};
+                    keys[data.id] = data.admin_token;
+                    localStorage.setItem('sharetien_admin_keys', JSON.stringify(keys));
+                } catch (e) {
+                    console.error('Không thể lưu admin token', e);
+                }
+            }
+
+            // Tự động tạo Member đầu tiên cho người tạo nhóm
+            await supabase.from('members').insert({
+                group_id: data.id,
+                name: creatorName,
+            });
+
+            const newGroup: Group = {
+                id: data.id,
+                name: data.name,
+                adminToken: data.admin_token,
+                creatorName: data.creator_name,
+                createdAt: data.created_at
+            };
             return newGroup;
         } catch (err: any) {
             console.error('Error creating group:', err);

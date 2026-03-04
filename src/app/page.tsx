@@ -35,6 +35,7 @@ export default function HomePage() {
     const createGroup = useExpenseStore((state) => state.createGroup);
 
     const [groupName, setGroupName] = useState("");
+    const [creatorName, setCreatorName] = useState("");
     const [isCreating, setIsCreating] = useState(false);
     const [recentGroups, setRecentGroups] = useState<RecentGroup[]>([]);
     const [joinId, setJoinId] = useState("");
@@ -47,7 +48,7 @@ export default function HomePage() {
         e.preventDefault();
         if (!groupName.trim()) return;
         setIsCreating(true);
-        const newGroup = await createGroup(groupName.trim());
+        const newGroup = await createGroup(groupName.trim(), creatorName.trim() || 'Admin');
         if (newGroup) {
             router.push(`/group/${newGroup.id}`);
         } else {
@@ -100,6 +101,14 @@ export default function HomePage() {
                             placeholder="VD: Trọ Quận 7, Du lịch Đà Lạt..."
                             value={groupName}
                             onChange={(e) => setGroupName(e.target.value)}
+                            className="h-14 w-full bg-white border-2 border-slate-900 px-4 text-base font-bold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-[4px_4px_0_0_rgba(15,23,42,1)] focus:outline-none focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all rounded-none"
+                            disabled={isCreating}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Tên của bạn (Người tạo nhóm)..."
+                            value={creatorName}
+                            onChange={(e) => setCreatorName(e.target.value)}
                             className="h-14 w-full bg-white border-2 border-slate-900 px-4 text-base font-bold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-[4px_4px_0_0_rgba(15,23,42,1)] focus:outline-none focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all rounded-none"
                             disabled={isCreating}
                         />

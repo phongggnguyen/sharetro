@@ -9,7 +9,7 @@ import AddExpenseModal from "@/components/expenses/AddExpenseModal";
 import SettlementView from "@/components/expenses/SettlementView";
 import MemberList from "@/components/members/MemberList";
 import MemberModal from "@/components/members/MemberModal";
-import { Plus, ListOrdered, Calculator, Users, ArrowLeft, Copy, Check, History } from "lucide-react";
+import { Plus, ListOrdered, Calculator, Users, ArrowLeft, Copy, Check, History, Shield } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 type Tab = "expenses" | "settlement" | "members";
@@ -148,6 +148,11 @@ export default function GroupPage() {
                             <p className="text-slate-500 font-bold text-xs mt-1 uppercase tracking-widest">
                                 {members.length} thành viên · {expenses.length} khoản chi
                             </p>
+                            {group.creatorName && (
+                                <p className="text-emerald-600 font-bold text-xs mt-1 uppercase tracking-widest flex items-center gap-1">
+                                    <Shield className="w-3.5 h-3.5" /> Tạo bởi: {group.creatorName}
+                                </p>
+                            )}
                         </div>
                     </div>
                     <button
