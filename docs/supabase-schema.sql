@@ -1,6 +1,7 @@
 -- Supabase schema for Sharetien
 
 -- 1. Xóa bảng cũ nếu tồn tại
+DROP TABLE IF EXISTS settlement_history CASCADE;
 DROP TABLE IF EXISTS expenses CASCADE;
 DROP TABLE IF EXISTS members CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
@@ -32,16 +33,31 @@ CREATE TABLE expenses (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 
--- 5. Cho phép thao tác dữ liệu cơ bản (Row Level Security - RLS)
+-- 5. Tạo bảng lưu trữ lịch sử chốt sổ hàng tháng
+CREATE TABLE settlement_history (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    group_id UUID REFERENCES groups(id) ON DELETE CASCADE,
+    period_date DATE NOT NULL,
+    from_member_id UUID NOT NULL,
+    from_member_name TEXT NOT NULL,
+    to_member_id UUID NOT NULL,
+    to_member_name TEXT NOT NULL,
+    amount NUMERIC NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- 6. Cho phép thao tác dữ liệu cơ bản (Row Level Security - RLS)
 ALTER TABLE groups ENABLE ROW LEVEL SECURITY;
 ALTER TABLE members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE settlement_history ENABLE ROW LEVEL SECURITY;
 
--- 6. Tạo Policy mở khóa cho Local/Anon (Phát triển cục bộ - Để Production nhớ đổi)
+-- 7. Tạo Policy mở khóa cho Local/Anon (Phát triển cục bộ - Để Production nhớ đổi)
 CREATE POLICY "Enable all operations for anon" ON groups FOR ALL USING (true);
 CREATE POLICY "Enable all operations for anon" ON members FOR ALL USING (true);
 CREATE POLICY "Enable all operations for anon" ON expenses FOR ALL USING (true);
+CREATE POLICY "Enable all operations for anon" ON settlement_history FOR ALL USING (true);
 
--- 7. Chèn một group mặc định ban đầu
+-- 8. Chèn một group mặc định ban đầu
 INSERT INTO groups (id, name) VALUES ('e2d7e0fb-9d2a-41f2-ba22-0cc690ce11d7', 'Default Group')
 ON CONFLICT DO NOTHING;
