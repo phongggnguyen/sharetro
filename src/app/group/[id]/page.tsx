@@ -9,7 +9,7 @@ import AddExpenseModal from "@/components/expenses/AddExpenseModal";
 import SettlementView from "@/components/expenses/SettlementView";
 import MemberList from "@/components/members/MemberList";
 import MemberModal from "@/components/members/MemberModal";
-import { Plus, ListOrdered, Calculator, Users, ArrowLeft, Copy, Check } from "lucide-react";
+import { Plus, ListOrdered, Calculator, Users, ArrowLeft, Copy, Check, History } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 type Tab = "expenses" | "settlement" | "members";
@@ -126,28 +126,37 @@ export default function GroupPage() {
                     <ArrowLeft className="w-3.5 h-3.5" />
                     Tất cả nhóm
                 </button>
-                <div className="flex items-center gap-3">
-                    <div className="bg-slate-900 flex items-center justify-center p-1 border-2 border-slate-900 shadow-[2px_2px_0_0_rgba(15,23,42,1)] shrink-0 w-12 h-12">
-                        <Logo className="w-full h-full object-contain" />
-                    </div>
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <h1 className="text-3xl font-black tracking-tighter uppercase text-slate-900 leading-none">{group.name}</h1>
-                            <button
-                                onClick={handleCopyId}
-                                title="Copy ID nhóm"
-                                className={`shrink-0 flex items-center justify-center w-7 h-7 border-2 transition-all duration-150 ${copied
+                <div className="flex items-center justify-between gap-3 w-full">
+                    <div className="flex items-center gap-3">
+                        <div className="bg-slate-900 flex items-center justify-center p-1 border-2 border-slate-900 shadow-[2px_2px_0_0_rgba(15,23,42,1)] shrink-0 w-12 h-12">
+                            <Logo className="w-full h-full object-contain" />
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <h1 className="text-3xl font-black tracking-tighter uppercase text-slate-900 leading-none truncate max-w-[150px] sm:max-w-xs">{group.name}</h1>
+                                <button
+                                    onClick={handleCopyId}
+                                    title="Copy ID nhóm"
+                                    className={`shrink-0 flex items-center justify-center w-7 h-7 border-2 transition-all duration-150 ${copied
                                         ? "border-emerald-600 bg-emerald-50 text-emerald-600 shadow-none translate-x-px translate-y-px"
                                         : "border-slate-900 bg-white text-slate-500 shadow-[2px_2px_0_0_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-px hover:translate-y-px hover:text-slate-900"
-                                    }`}
-                            >
-                                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                            </button>
+                                        }`}
+                                >
+                                    {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                                </button>
+                            </div>
+                            <p className="text-slate-500 font-bold text-xs mt-1 uppercase tracking-widest">
+                                {members.length} thành viên · {expenses.length} khoản chi
+                            </p>
                         </div>
-                        <p className="text-slate-500 font-bold text-xs mt-1 uppercase tracking-widest">
-                            {members.length} thành viên · {expenses.length} khoản chi
-                        </p>
                     </div>
+                    <button
+                        onClick={() => router.push(`/group/${groupId}/history`)}
+                        className="flex items-center justify-center w-10 h-10 border-2 border-slate-900 bg-white text-slate-900 shadow-[2px_2px_0_0_rgba(15,23,42,1)] hover:translate-y-px hover:translate-x-px hover:shadow-none transition-all duration-150 shrink-0"
+                        title="Lịch sử chốt sổ"
+                    >
+                        <History className="w-4 h-4" />
+                    </button>
                 </div>
                 <div className="flex gap-2 mt-5 flex-wrap">
                     {members.map(m => (
