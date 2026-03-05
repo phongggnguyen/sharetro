@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, History as HistoryIcon, Calculator, AlertCircle } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
+import { NeoLoading } from "@/components/ui/NeoLoading";
 
 interface SettlementRecord {
     id: string;
@@ -89,8 +90,8 @@ export default function HistoryPage() {
             {/* Content */}
             <div className="flex-1 p-6 flex flex-col gap-6">
                 {isLoading ? (
-                    <div className="font-black text-center uppercase tracking-widest animate-pulse border-2 border-slate-900 p-6 bg-white">
-                        Đang tải dữ liệu...
+                    <div className="py-12">
+                        <NeoLoading text="MEOW MEOW MEOW..." />
                     </div>
                 ) : error ? (
                     <div className="font-bold text-red-600 border-2 border-red-600 p-4 bg-red-50 flex items-start gap-3">

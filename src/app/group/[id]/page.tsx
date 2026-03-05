@@ -11,6 +11,7 @@ import MemberList from "@/components/members/MemberList";
 import MemberModal from "@/components/members/MemberModal";
 import { Plus, ListOrdered, Calculator, Users, ArrowLeft, Copy, Check, History, Shield } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import { NeoLoading } from "@/components/ui/NeoLoading";
 
 type Tab = "expenses" | "settlement" | "members";
 
@@ -88,9 +89,7 @@ export default function GroupPage() {
     if (isLoading) {
         return (
             <main className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-900">
-                <div className="font-black text-2xl uppercase tracking-widest animate-pulse border-4 border-slate-900 p-8 shadow-[8px_8px_0_0_rgba(15,23,42,1)] bg-white">
-                    Đang tải...
-                </div>
+                <NeoLoading text="MEOW MEOW MEOW..." />
             </main>
         );
     }
