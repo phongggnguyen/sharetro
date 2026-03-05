@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, History as HistoryIcon, Calculator, AlertCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, History as HistoryIcon, Calculator, AlertCircle } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 
 interface SettlementRecord {
@@ -121,7 +121,7 @@ export default function HistoryPage() {
                                             <span className="text-red-600 px-2 py-0.5 bg-red-50 border border-red-200">
                                                 {record.from_member_name}
                                             </span>
-                                            <ArrowLeft className="w-3 h-3 text-slate-400" />
+                                            <ArrowRight className="w-3 h-3 text-slate-400" />
                                             <span className="text-emerald-600 px-2 py-0.5 bg-emerald-50 border border-emerald-200">
                                                 {record.to_member_name}
                                             </span>
