@@ -51,15 +51,24 @@ export default function HistoryPage() {
     }, [groupId]);
 
     // Group by period_name (or fallback to period_date if period_name is somehow missing)
-    const groupedRecords = records.reduce((acc, record) => {
+    const groupedRecordsBase = records.reduce((acc, record) => {
         const key = record.period_name || (() => {
             const date = new Date(record.period_date);
             return `Tháng ${date.getMonth() + 1}/${date.getFullYear()}`;
         })();
-        if (!acc[key]) acc[key] = [];
-        acc[key].push(record);
+        if (!acc[key]) {
+            acc[key] = {
+                periodName: key,
+                sortDate: new Date(record.period_date).getTime(),
+                records: []
+            };
+        }
+        acc[key].records.push(record);
         return acc;
-    }, {} as Record<string, SettlementRecord[]>);
+    }, {} as Record<string, { periodName: string, sortDate: number, records: SettlementRecord[] }>);
+
+    // Convert to array and sort descending by date so newest is at the top
+    const groupedRecordsArray = Object.values(groupedRecordsBase).sort((a, b) => b.sortDate - a.sortDate);
 
     return (
         <main className="flex min-h-screen flex-col bg-slate-50 text-slate-900 selection:bg-black selection:text-white">
@@ -101,7 +110,7 @@ export default function HistoryPage() {
                             <p className="text-sm">{error}</p>
                         </div>
                     </div>
-                ) : Object.keys(groupedRecords).length === 0 ? (
+                ) : groupedRecordsArray.length === 0 ? (
                     <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-slate-300">
                         <Calculator className="w-12 h-12 text-slate-300 mb-4" />
                         <p className="font-black text-slate-400 uppercase tracking-widest text-sm">
@@ -109,7 +118,7 @@ export default function HistoryPage() {
                         </p>
                     </div>
                 ) : (
-                    Object.entries(groupedRecords).map(([periodName, periodRecords]) => (
+                    groupedRecordsArray.map(({ periodName, records: periodRecords }) => (
                         <div key={periodName} className="flex flex-col gap-3">
                             <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 flex items-center gap-2">
                                 <span className="w-4 h-1 bg-emerald-400 inline-block border border-slate-900"></span>
