@@ -199,6 +199,27 @@ export default function HomePage() {
                     No Debt · Swiss Minimalist Design
                 </p>
             </div>
+
+            {/* JSON-LD Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "WebApplication",
+                        "name": "No Debt",
+                        "url": "https://nodebt.app",
+                        "description": "Ứng dụng chia tiền phòng trọ, đi chơi nhóm công bằng, minh bạch và hoàn toàn miễn phí.",
+                        "applicationCategory": "FinanceApplication",
+                        "operatingSystem": "Any",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "VND"
+                        }
+                    })
+                }}
+            />
         </main>
     );
 }

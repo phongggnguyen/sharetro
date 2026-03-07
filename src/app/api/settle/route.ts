@@ -102,6 +102,41 @@ export async function POST(request: Request) {
             throw new Error('Lỗi khi xóa danh sách chi tiêu');
         }
 
+        // 6. Xóa chu kỳ cũ nếu vượt quá 12 chu kỳ (Background task)
+        try {
+            // Lấy danh sách các chu kỳ (period_name) duy nhất của nhóm, xếp mới nhất lên đầu
+            const { data: periodsData, error: periodsError } = await supabase
+                .from('settlement_history')
+                .select('period_name, created_at')
+                .eq('group_id', groupId)
+                .order('created_at', { ascending: false });
+
+            if (!periodsError && periodsData) {
+                // Tạo Set để lấy các period_name unique (vì 1 period có nhiều records)
+                const uniquePeriods = Array.from(new Set(periodsData.map((p: any) => p.period_name)));
+
+                if (uniquePeriods.length > 12) {
+                    // Lấy danh sách các chu kỳ cần xóa (từ vị trí 12 trở đi)
+                    const periodsToDelete = uniquePeriods.slice(12);
+
+                    const { error: cleanupError } = await supabase
+                        .from('settlement_history')
+                        .delete()
+                        .eq('group_id', groupId)
+                        .in('period_name', periodsToDelete);
+
+                    if (cleanupError) {
+                        console.error(`Failed to cleanup old periods for group ${groupId}:`, cleanupError);
+                    } else {
+                        console.log(`Successfully cleaned up ${periodsToDelete.length} old periods for group ${groupId}`);
+                    }
+                }
+            }
+        } catch (cleanupEx) {
+            console.error('Exception during old periods cleanup:', cleanupEx);
+            // Không throw error ở đây để không làm gián đoạn response thành công của chốt sổ
+        }
+
         return NextResponse.json({
             success: true,
             message: `Đã chốt sổ thành công kỳ: ${periodName}`,
