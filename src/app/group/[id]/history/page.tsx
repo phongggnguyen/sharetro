@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, History as HistoryIcon, Calculator, AlertCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, History as HistoryIcon, Calculator, AlertCircle, Trash2, Loader2 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { NeoLoading } from "@/components/ui/NeoLoading";
 
@@ -28,6 +28,24 @@ export default function HistoryPage() {
     const [records, setRecords] = useState<SettlementRecord[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [adminToken, setAdminToken] = useState("");
+    const [isDeleting, setIsDeleting] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined" && groupId) {
+            try {
+                const rawKeys = localStorage.getItem("sharetien_admin_keys");
+                if (rawKeys) {
+                    const keys = JSON.parse(rawKeys);
+                    if (keys[groupId]) {
+                        setIsAdmin(true);
+                        setAdminToken(keys[groupId]);
+                    }
+                }
+            } catch (e) { }
+        }
+    }, [groupId]);
 
     useEffect(() => {
         const fetchHistory = async () => {
@@ -122,10 +140,52 @@ export default function HistoryPage() {
                 ) : (
                     groupedRecordsArray.map(({ periodName, records: periodRecords }) => (
                         <div key={periodName} className="flex flex-col gap-3">
-                            <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 flex items-center gap-2">
-                                <span className="w-4 h-1 bg-emerald-400 inline-block border border-slate-900"></span>
-                                {periodName}
-                            </h2>
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-sm font-black uppercase tracking-widest text-slate-900 flex items-center gap-2">
+                                    <span className="w-4 h-1 bg-emerald-400 inline-block border border-slate-900"></span>
+                                    {periodName}
+                                </h2>
+                                {isAdmin && (
+                                    <button
+                                        onClick={async () => {
+                                            if (!isAdmin || !adminToken) return;
+                                            const confirmed = window.confirm(`Bạn có chắc chắn muốn xoá lịch sử chốt sổ của kỳ "${periodName}" không?\nHành động này không thể hoàn tác.`);
+                                            if (!confirmed) return;
+
+                                            setIsDeleting(periodName);
+                                            try {
+                                                const res = await fetch('/api/history', {
+                                                    method: 'DELETE',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ groupId, periodName, adminToken })
+                                                });
+                                                const data = await res.json();
+                                                if (!data.success) {
+                                                    alert(data.error || 'Lỗi khi xoá lịch sử chốt sổ.');
+                                                    return;
+                                                }
+                                                setRecords(prev => prev.filter(r => r.period_name !== periodName));
+                                                router.refresh();
+                                            } catch (err) {
+                                                alert('Lỗi kết nối. Vui lòng thử lại.');
+                                                console.error(err);
+                                            } finally {
+                                                setIsDeleting(null);
+                                            }
+                                        }}
+                                        disabled={isDeleting === periodName}
+                                        className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-red-600 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 border-2 border-transparent hover:border-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                        title="Xoá lịch sử kỳ này"
+                                    >
+                                        {isDeleting === periodName ? (
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                        ) : (
+                                            <Trash2 className="w-4 h-4" />
+                                        )}
+                                        Xoá
+                                    </button>
+                                )}
+                            </div>
                             <div className="bg-white border-2 border-slate-900 p-4 shadow-[4px_4px_0_0_rgba(15,23,42,1)] flex flex-col gap-3">
                                 {periodRecords.length === 1 && periodRecords[0].amount === 0 ? (
                                     <div className="text-center py-4 bg-emerald-50 border-2 border-dashed border-emerald-300">
