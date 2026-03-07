@@ -87,6 +87,20 @@ export async function POST(request: Request) {
             amount: t.amount
         }));
 
+        if (records.length === 0 && membersData.length > 0) {
+            // Nếu không có nợ (mọi người hoà nhau), tạo 1 record ảo với amount = 0 để giữ kỳ chốt sổ
+            records.push({
+                group_id: groupId,
+                period_date: periodDate,
+                period_name: periodName,
+                from_member_id: membersData[0].id,
+                from_member_name: membersData[0].name,
+                to_member_id: membersData[0].id,
+                to_member_name: membersData[0].name,
+                amount: 0
+            });
+        }
+
         if (records.length > 0) {
             const { error: insertError } = await supabase.from('settlement_history').insert(records);
             if (insertError) {

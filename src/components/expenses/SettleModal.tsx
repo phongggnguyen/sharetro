@@ -6,6 +6,7 @@ import { X, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useExpenseStore } from "@/store/useExpenseStore";
+import { useRouter } from "next/navigation";
 
 interface SettleModalProps {
     isOpen: boolean;
@@ -17,6 +18,7 @@ interface SettleModalProps {
 export default function SettleModal({ isOpen, onClose, isAdmin, adminToken }: SettleModalProps) {
     const groupId = useExpenseStore((state) => state.group?.id);
     const fetchData = useExpenseStore((state) => state.fetchData);
+    const router = useRouter();
 
     const [periodName, setPeriodName] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,6 +78,7 @@ export default function SettleModal({ isOpen, onClose, isAdmin, adminToken }: Se
 
             // Reload lại data của nhóm
             await fetchData(groupId);
+            router.refresh();
             onClose();
 
         } catch (error) {

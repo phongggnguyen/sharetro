@@ -36,7 +36,8 @@ export default function HistoryPage() {
                     .from('settlement_history')
                     .select('*')
                     .eq('group_id', groupId)
-                    .order('period_date', { ascending: false });
+                    .order('period_date', { ascending: false })
+                    .order('created_at', { ascending: false });
 
                 if (error) throw error;
                 setRecords(data || []);
@@ -59,7 +60,8 @@ export default function HistoryPage() {
         if (!acc[key]) {
             acc[key] = {
                 periodName: key,
-                sortDate: new Date(record.period_date).getTime(),
+                // Using created_at as sort date to handle multiple settlements on the same period_date
+                sortDate: new Date(record.created_at).getTime(),
                 records: []
             };
         }
@@ -125,22 +127,33 @@ export default function HistoryPage() {
                                 {periodName}
                             </h2>
                             <div className="bg-white border-2 border-slate-900 p-4 shadow-[4px_4px_0_0_rgba(15,23,42,1)] flex flex-col gap-3">
-                                {periodRecords.map(record => (
-                                    <div key={record.id} className="flex justify-between items-center py-2 border-b-2 border-dashed border-slate-200 last:border-0 last:pb-0">
-                                        <div className="flex items-center gap-2 text-sm font-bold">
-                                            <span className="text-red-600 px-2 py-0.5 bg-red-50 border border-red-200">
-                                                {record.from_member_name}
-                                            </span>
-                                            <ArrowRight className="w-3 h-3 text-slate-400" />
-                                            <span className="text-emerald-600 px-2 py-0.5 bg-emerald-50 border border-emerald-200">
-                                                {record.to_member_name}
+                                {periodRecords.length === 1 && periodRecords[0].amount === 0 ? (
+                                    <div className="text-center py-4 bg-emerald-50 border-2 border-dashed border-emerald-300">
+                                        <p className="font-bold text-emerald-700 uppercase tracking-widest text-sm mb-1">
+                                            🎉 Tuyệt vời!
+                                        </p>
+                                        <p className="text-emerald-600 font-medium text-sm">
+                                            Không có khoản nợ nào cần thanh toán trong kỳ này.
+                                        </p>
+                                    </div>
+                                ) : (
+                                    periodRecords.map(record => (
+                                        <div key={record.id} className="flex justify-between items-center py-2 border-b-2 border-dashed border-slate-200 last:border-0 last:pb-0">
+                                            <div className="flex items-center gap-2 text-sm font-bold">
+                                                <span className="text-red-600 px-2 py-0.5 bg-red-50 border border-red-200">
+                                                    {record.from_member_name}
+                                                </span>
+                                                <ArrowRight className="w-3 h-3 text-slate-400" />
+                                                <span className="text-emerald-600 px-2 py-0.5 bg-emerald-50 border border-emerald-200">
+                                                    {record.to_member_name}
+                                                </span>
+                                            </div>
+                                            <span className="font-black text-slate-900">
+                                                {record.amount.toLocaleString('vi-VN')}đ
                                             </span>
                                         </div>
-                                        <span className="font-black text-slate-900">
-                                            {record.amount.toLocaleString('vi-VN')}đ
-                                        </span>
-                                    </div>
-                                ))}
+                                    ))
+                                )}
                             </div>
                         </div>
                     ))
