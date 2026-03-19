@@ -59,8 +59,30 @@ export default function HomePage() {
 
     const handleJoinGroup = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!joinId.trim()) return;
-        router.push(`/group/${joinId.trim()}`);
+        const input = joinId.trim();
+        if (!input) return;
+
+        try {
+            // Nếu người dùng dán toàn bộ URL (vd: https://sharetien.../group/e2d7e?admin=...)
+            if (input.startsWith("http://") || input.startsWith("https://")) {
+                const url = new URL(input);
+                if (url.pathname.startsWith("/group/")) {
+                    router.push(`${url.pathname}${url.search}`);
+                    return;
+                }
+            }
+            
+            // Nếu người dùng dán đường dẫn tương đối
+            if (input.startsWith("/group/")) {
+                router.push(input);
+                return;
+            }
+        } catch (error) {
+            console.error("Lỗi parse URL:", error);
+        }
+
+        // Mặc định: Coi như người dùng dán ID (VD: e2d7e0fb...)
+        router.push(`/group/${input}`);
     };
 
     const handleRemoveRecent = (id: string, e: React.MouseEvent) => {
@@ -167,16 +189,16 @@ export default function HomePage() {
                     </section>
                 )}
 
-                {/* Vào nhóm bằng ID */}
+                {/* Vào nhóm bằng ID / Link */}
                 <section>
                     <h2 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 mb-4 flex items-center gap-2">
                         <span className="w-4 h-0.5 bg-slate-400 inline-block" />
-                        Vào nhóm bằng ID
+                        Vào nhóm bằng ID / Link
                     </h2>
                     <form onSubmit={handleJoinGroup} className="flex gap-2">
                         <input
                             type="text"
-                            placeholder="Dán ID nhóm vào đây..."
+                            placeholder="Dán ID hoặc Link nhóm vào đây..."
                             value={joinId}
                             onChange={(e) => setJoinId(e.target.value)}
                             className="flex-1 h-12 bg-white border-2 border-slate-300 px-4 text-sm font-bold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-[3px_3px_0_0_rgba(15,23,42,0.2)] focus:outline-none focus:border-slate-900 focus:shadow-[3px_3px_0_0_rgba(15,23,42,0.8)] transition-all rounded-none"

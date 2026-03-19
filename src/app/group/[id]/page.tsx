@@ -9,9 +9,15 @@ import AddExpenseModal from "@/components/expenses/AddExpenseModal";
 import SettlementView from "@/components/expenses/SettlementView";
 import MemberList from "@/components/members/MemberList";
 import MemberModal from "@/components/members/MemberModal";
-import { Plus, ListOrdered, Calculator, Users, ArrowLeft, Copy, Check, History, Shield } from "lucide-react";
+import { Plus, ListOrdered, Calculator, Users, ArrowLeft, Copy, Check, History, Shield, Share2, UserPlus, KeyRound } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { NeoLoading } from "@/components/ui/NeoLoading";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type Tab = "expenses" | "settlement" | "members";
 
@@ -45,12 +51,69 @@ export default function GroupPage() {
     const [activeTab, setActiveTab] = useState<Tab>("expenses");
     const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
     const [editingMember, setEditingMember] = useState<Member | null>(null);
-    const [copied, setCopied] = useState(false);
+    const [copiedAdmin, setCopiedAdmin] = useState(false);
+    const [copiedMember, setCopiedMember] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
-    const handleCopyId = () => {
-        navigator.clipboard.writeText(groupId);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+    // Xử lý admin token từ URL
+    useEffect(() => {
+        if (typeof window !== "undefined" && groupId) {
+            const url = new URL(window.location.href);
+            const tokenFromUrl = url.searchParams.get("admin");
+
+            if (tokenFromUrl) {
+                // Lưu token vào local storage
+                try {
+                    const rawKeys = localStorage.getItem("sharetien_admin_keys");
+                    const keys = rawKeys ? JSON.parse(rawKeys) : {};
+                    keys[groupId] = tokenFromUrl;
+                    localStorage.setItem("sharetien_admin_keys", JSON.stringify(keys));
+                    setIsAdmin(true);
+
+                    // Xóa query param trên URL
+                    url.searchParams.delete("admin");
+                    window.history.replaceState({}, document.title, url.toString());
+                } catch (e) {
+                    console.error("Lỗi khi lưu admin token:", e);
+                }
+            } else {
+                // Kiểm tra xem đã là admin chưa
+                try {
+                    const rawKeys = localStorage.getItem("sharetien_admin_keys");
+                    if (rawKeys) {
+                        const keys = JSON.parse(rawKeys);
+                        if (keys[groupId]) setIsAdmin(true);
+                    }
+                } catch (e) {
+                    console.error("Lỗi khi đọc token:", e);
+                }
+            }
+        }
+    }, [groupId]);
+
+    const handleCopy = (type: "admin" | "member") => {
+        const baseUrl = window.location.origin + `/group/${groupId}`;
+        let linkToCopy = baseUrl;
+
+        if (type === "admin") {
+            try {
+                const rawKeys = localStorage.getItem("sharetien_admin_keys");
+                if (rawKeys) {
+                    const keys = JSON.parse(rawKeys);
+                    const token = keys[groupId];
+                    if (token) {
+                        linkToCopy = `${baseUrl}?admin=${token}`;
+                    }
+                }
+            } catch (e) { }
+            setCopiedAdmin(true);
+            setTimeout(() => setCopiedAdmin(false), 2000);
+        } else {
+            setCopiedMember(true);
+            setTimeout(() => setCopiedMember(false), 2000);
+        }
+
+        navigator.clipboard.writeText(linkToCopy);
     };
 
     useEffect(() => {
@@ -132,17 +195,54 @@ export default function GroupPage() {
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <h1 className="text-3xl font-black tracking-tighter uppercase text-slate-900 leading-none truncate max-w-[150px] sm:max-w-xs">{group.name}</h1>
-                                <button
-                                    onClick={handleCopyId}
-                                    title="Copy ID nhóm"
-                                    className={`shrink-0 flex items-center justify-center w-7 h-7 border-2 transition-all duration-150 ${copied
-                                        ? "border-emerald-600 bg-emerald-50 text-emerald-600 shadow-none translate-x-px translate-y-px"
-                                        : "border-slate-900 bg-white text-slate-500 shadow-[2px_2px_0_0_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-px hover:translate-y-px hover:text-slate-900"
-                                        }`}
-                                >
-                                    {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                                </button>
+                                <h1 className="text-3xl font-black tracking-tighter uppercase text-slate-900 leading-none truncate max-w-[140px] sm:max-w-[200px]">{group.name}</h1>
+                                
+                                {isAdmin ? (
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <button
+                                                title="Chia sẻ nhóm"
+                                                className="shrink-0 flex items-center justify-center w-7 h-7 border-2 border-slate-900 bg-white text-slate-900 shadow-[2px_2px_0_0_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-px hover:translate-y-px hover:bg-slate-100 transition-all duration-150"
+                                            >
+                                                <Share2 className="w-3.5 h-3.5" />
+                                            </button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="start" className="w-56 p-2 border-2 border-slate-900 rounded-none shadow-[4px_4px_0_0_rgba(15,23,42,1)] bg-white mt-2 font-sans overflow-hidden animate-in slide-in-from-top-2">
+                                            <DropdownMenuItem 
+                                                onClick={() => handleCopy("member")}
+                                                className="flex flex-col items-start gap-1 p-3 cursor-pointer focus:bg-slate-100 active:bg-slate-200 transition-colors"
+                                            >
+                                                <div className="flex items-center gap-2 font-black text-slate-900 uppercase tracking-widest text-xs">
+                                                    {copiedMember ? <Check className="w-4 h-4 text-emerald-600" /> : <UserPlus className="w-4 h-4" />}
+                                                    Link Thành viên
+                                                </div>
+                                                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider ml-6 leading-tight">Chỉ xem và thêm chi tiêu</span>
+                                            </DropdownMenuItem>
+                                            <div className="h-0.5 bg-slate-100 w-full" />
+                                            <DropdownMenuItem 
+                                                onClick={() => handleCopy("admin")}
+                                                className="flex flex-col items-start gap-1 p-3 cursor-pointer focus:bg-emerald-50 active:bg-emerald-100 transition-colors group/admin"
+                                            >
+                                                <div className="flex items-center gap-2 font-black text-emerald-700 uppercase tracking-widest text-xs">
+                                                    {copiedAdmin ? <Check className="w-4 h-4 text-emerald-600" /> : <KeyRound className="w-4 h-4" />}
+                                                    Link Quản trị viên
+                                                </div>
+                                                <span className="text-[10px] text-emerald-600/70 font-bold uppercase tracking-wider ml-6 leading-tight">Có quyền Chốt Số</span>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                ) : (
+                                    <button
+                                        onClick={() => handleCopy("member")}
+                                        title="Copy Link nhóm"
+                                        className={`shrink-0 flex items-center justify-center w-7 h-7 border-2 transition-all duration-150 ${copiedMember
+                                            ? "border-emerald-600 bg-emerald-50 text-emerald-600 shadow-none translate-x-px translate-y-px"
+                                            : "border-slate-900 bg-white text-slate-500 shadow-[2px_2px_0_0_rgba(15,23,42,1)] hover:shadow-none hover:translate-x-px hover:translate-y-px hover:text-slate-900"
+                                            }`}
+                                    >
+                                        {copiedMember ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                                    </button>
+                                )}
                             </div>
                             <p className="text-slate-500 font-bold text-xs mt-1 uppercase tracking-widest">
                                 {members.length} thành viên · {expenses.length} khoản chi
