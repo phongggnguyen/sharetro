@@ -86,7 +86,7 @@ export default function SettlementView() {
             <div className="bg-white border-4 border-slate-900 p-6 shadow-[8px_8px_0_0_rgba(15,23,42,1)] relative">
                 <h3 className="font-black text-lg text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2 border-b-2 border-slate-900 pb-2">
                     <span className="w-3 h-3 bg-slate-900" />
-                    Số dư từng người
+                    Tổng chi tiêu từng người
                 </h3>
                 <div className="flex flex-col gap-2">
                     {balances.map((b: MemberBalance) => (
@@ -100,11 +100,8 @@ export default function SettlementView() {
                                 </div>
                                 <span className="font-bold text-slate-900 text-lg uppercase">{b.name}</span>
                             </div>
-                            <span
-                                className={`font-black text-xl px-3 py-1 border-2 border-slate-900 ${b.balance >= 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
-                            >
-                                {b.balance >= 0 ? "+" : ""}
-                                {formatCurrency(b.balance)}
+                            <span className="font-black text-xl px-3 py-1 border-2 border-slate-900 bg-slate-100 text-slate-900">
+                                {formatCurrency(b.totalPaid)}
                             </span>
                         </div>
                     ))}
