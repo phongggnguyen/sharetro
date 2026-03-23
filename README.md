@@ -1,6 +1,119 @@
+# English 🌍
+
+# 💸 Sharetien - Expense Splitter App
+
+**Sharetien** is a mobile-first web application designed with a **Swiss Neo-Brutalism** visual style. It helps groups of friends living together or traveling track shared expenses and automatically calculates the fairest and simplest settlement plan to clear their debts.
+
+![Sharetien Banner](https://raw.githubusercontent.com/phongggnguyen/sharetro/main/main/public/banner.png) *(Illustrative image)*
+
+---
+
+## 🚀 Core Features
+
+- **📱 PWA Support**: Install the app directly on your phone's home screen. Basic offline support with cached data access.
+- **📅 Monthly Settlement**:
+  - Automatically settle debits/credits on the 1st of every month.
+  - Keep a detailed settlement history for each cycle.
+  - Start a new settlement cycle with zeroed balances.
+- **Create & Join Groups**: Quickly create a group and share the ID/link with friends.
+- **Member Management**: Add group members along with their bank account details to receive money.
+- **Expense Tracking**: Easily log expenses, the total amount, and who paid for it.
+- **Optimized Settlement Algorithm**: Automatically compute balances and generate the simplest money transfer plan to clear debts (using a Greedy Algorithm).
+- **Quick QR Code Payments**: Integrated with **VietQR**, allowing dynamic QR code generation (including the exact amount and memo) with a single tap.
+- **Access History**: Automatically saves recently accessed groups in the browser storage for quick retrieval.
+
+---
+
+## 🛠 Tech Stack
+
+Built on modern 2024-2025 web technologies:
+
+- **Framework**: [Next.js 14](https://nextjs.org/) (App Router).
+- **Database / Backend**: [Supabase](https://supabase.com/) (Postgres + Row Level Security).
+- **Automation**: **Vercel Cron Jobs** (For periodic monthly settlements).
+- **PWA**: Service Workers + Web Manifest.
+- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/).
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [Shadcn UI](https://ui.shadcn.com/).
+- **Design Style**: **Neo-Brutalism** (Bold typography, high contrast, hard shadows).
+- **Infrastructure**: Vercel.
+
+---
+
+## 📦 Local Setup & Installation
+
+### 1. Clone repository
+```bash
+git clone https://github.com/phongggnguyen/sharetro.git
+cd sharetro
+```
+
+### 2. Install dependencies
+```bash
+npm install
+```
+
+### 3. Environment variables
+Create a `.env.local` file in the root directory and fill in your Supabase credentials:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### 4. Database Setup
+Execute the SQL script in `docs/supabase-schema.sql` via the Supabase SQL Editor to set up tables (`groups`, `members`, `expenses`, `settlement_history`) and configure Row Level Security (RLS).
+
+### 5. Cron Job Setup (Production)
+To enable the automated monthly settlement feature, configure a Cron Job in Vercel to ping the `/api/cron/settle` endpoint regularly.
+
+### 6. Run the application
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 📂 Directory Structure
+
+```text
+src/
+├── app/            # Next.js App Router (Pages, Layout, API)
+│   └── api/cron/   # Periodic settlement logic
+├── components/     # UI Components (PWA, Expenses, Members, etc.)
+├── lib/            # Business Logic & Utility (calculator.ts)
+├── store/          # Zustand State Management
+├── types/          # TypeScript Interfaces
+└── utils/          # Supabase Client & Server utilities
+public/             # Assets, Manifest & Service Worker
+docs/               # Documentation & Database Schema
+```
+
+---
+
+## 🎨 Design Language: Neo-Brutalism & "Cashier Cat"
+
+The app is inspired by Neo-Brutalism paired with a playful **"Cashier Cat"** mascot:
+- **Icon**: A focused cat wearing glasses billing receipts against a matte black background.
+- **UI**: Thick borders (2px - 4px), hard shadows, and vibrant contrasting colors.
+- **UX**: Optimized for touch interactions on mobile devices, ensuring a fast and smooth experience.
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the **Issues** page.
+
+---
+---
+
+<br>
+<br>
+
+# Tiếng Việt 🇻🇳
+
 # 💸 Sharetien - Chia Tiền Trọ Thật Dễ
 
-**Sharetien** là một ứng dụng web (Mobile-first) được thiết kế theo phong cách **Swiss Neo-Brutalism**, giúp các nhóm bạn ở chung hoặc đi du lịch ghi chép chi tiêu và tự động tính toán cấn trừ nợ một cách công bằng nhất.
+**Sharetien** là một ứng dụng web (Mobile-first) được thiết kế theo phong cách **Swiss Neo-Brutalism**, giúp các nhóm bạn ở chung hoặc đi du lịch ghi chép chi tiêu và tự động tính toán cấn trừ nợ một cách công bằng và tối giản nhất.
 
 ![Sharetien Banner](https://raw.githubusercontent.com/phongggnguyen/sharetro/main/main/public/banner.png) *(Hình ảnh minh họa)*
 
@@ -55,8 +168,6 @@ Tạo file `.env.local` ở thư mục gốc và điền thông tin Supabase c�
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key (Dành cho Cron API)
-CRON_SECRET=your_vercel_cron_secret (Bảo mật cho endpoint chốt sổ)
 ```
 
 ### 4. Setup Database
@@ -102,5 +213,3 @@ docs/               # Tài liệu & Database Schema tổng hợp
 ## 🤝 Đóng Góp
 
 Mọi ý tưởng đóng góp hoặc báo lỗi, vui lòng tạo **Issue** hoặc gửi **Pull Request**. Cảm ơn các bạn!
-
----
