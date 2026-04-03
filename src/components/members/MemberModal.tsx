@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useExpenseStore } from "@/store/useExpenseStore";
 import { Member } from "@/types";
+import { VIETQR_BANKS } from "@/lib/constants/banks";
 
 interface MemberModalProps {
     isOpen: boolean;
@@ -99,12 +100,18 @@ export default function MemberModal({ isOpen, onClose, memberToEdit }: MemberMod
 
                     <div className="space-y-2">
                         <label className="text-sm font-semibold">Mã ngân hàng (Tùy chọn)</label>
-                        <Input
-                            placeholder="VD: VCB, MB, TCB..."
+                        <select
                             value={bankId}
                             onChange={(e) => setBankId(e.target.value)}
-                            className="h-12"
-                        />
+                            className="flex h-12 w-full rounded-xl border border-white/10 bg-white/5 backdrop-blur-xl px-4 py-2 text-sm text-foreground shadow-inner ring-offset-background placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300 focus:bg-white/10"
+                        >
+                            <option value="" className="text-black">-- Chọn ngân hàng --</option>
+                            {VIETQR_BANKS.map((bank) => (
+                                <option key={bank.id} value={bank.id} className="text-black">
+                                    {bank.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="space-y-2">
