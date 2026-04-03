@@ -27,8 +27,8 @@ export default function QRModal({ transaction, toMember, onClose }: QRModalProps
 
     return (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm">
-            <div className="bg-background w-full sm:max-w-sm rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-200">
-                <div className="flex items-center justify-between p-4 border-b">
+            <div className="bg-background w-full sm:max-w-sm max-h-[90vh] flex flex-col rounded-t-2xl sm:rounded-2xl shadow-2xl animate-in slide-in-from-bottom-5 fade-in duration-200">
+                <div className="flex items-center justify-between p-4 border-b shrink-0">
                     <div>
                         <h2 className="font-bold text-base">Mã QR Chuyển khoản</h2>
                         <p className="text-xs text-muted-foreground mt-0.5">
@@ -43,18 +43,18 @@ export default function QRModal({ transaction, toMember, onClose }: QRModalProps
                     </button>
                 </div>
 
-                <div className="p-4 flex flex-col items-center gap-4">
+                <div className="p-4 flex flex-col items-center gap-3 overflow-y-auto">
                     <div className="text-center">
                         <p className="text-sm text-muted-foreground">Số tiền cần chuyển</p>
-                        <p className="text-3xl font-black text-rose-600 tracking-tighter mt-1">
+                        <p className="text-2xl font-black text-rose-600 tracking-tighter mt-1">
                             {formatCurrency(transaction.amount)}
                         </p>
                     </div>
 
                     {!hasBankInfo ? (
-                        <div className="bg-slate-100 border-2 border-slate-200 rounded-xl p-8 w-full max-w-[280px] mx-auto flex flex-col items-center justify-center text-center gap-3">
-                            <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-2">
-                                <X className="w-8 h-8 text-slate-400" />
+                        <div className="bg-slate-100 border-2 border-slate-200 rounded-xl p-6 w-full max-w-[260px] mx-auto flex flex-col items-center justify-center text-center gap-3">
+                            <div className="w-12 h-12 bg-slate-200 rounded-full flex items-center justify-center mb-1">
+                                <X className="w-6 h-6 text-slate-400" />
                             </div>
                             <p className="font-bold text-slate-700">Chưa có thông tin</p>
                             <p className="text-sm text-slate-500">
@@ -63,7 +63,7 @@ export default function QRModal({ transaction, toMember, onClose }: QRModalProps
                         </div>
                     ) : (
                         <>
-                            <div className="bg-muted/30 rounded-xl p-3 w-full max-w-[280px] mx-auto border-4 border-slate-900 shadow-[4px_4px_0_0_rgba(15,23,42,1)]">
+                            <div className="bg-muted/30 rounded-xl p-2 w-full max-w-[240px] mx-auto border-4 border-slate-900 shadow-[4px_4px_0_0_rgba(15,23,42,1)]">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src={qrUrl}
@@ -75,20 +75,20 @@ export default function QRModal({ transaction, toMember, onClose }: QRModalProps
                                         target.nextElementSibling?.classList.remove("hidden");
                                     }}
                                 />
-                                <div className="hidden text-center py-8 text-sm text-muted-foreground">
+                                <div className="hidden text-center py-6 text-sm text-muted-foreground">
                                     <p>Không tải được QR</p>
                                     <p className="text-xs mt-1">Kiểm tra lại thông tin ngân hàng</p>
                                 </div>
                             </div>
 
-                            <div className="text-center text-sm text-slate-700 bg-emerald-50 border-2 border-emerald-600 rounded-lg p-3 w-full max-w-[280px]">
-                                <p className="font-black text-emerald-900 uppercase">
+                            <div className="text-center text-xs text-slate-700 bg-emerald-50 border-2 border-emerald-600 rounded-lg p-3 w-full max-w-[260px]">
+                                <p className="font-black text-emerald-900 uppercase text-sm">
                                     {toMember?.name}
                                 </p>
-                                <p className="font-bold text-emerald-700 mt-1">
+                                <p className="font-bold text-emerald-700 mt-0.5">
                                     {bankId} - {accountNo}
                                 </p>
-                                <p className="mt-2 text-xs italic text-emerald-600 bg-emerald-100/50 p-2 rounded">
+                                <p className="mt-1.5 italic text-emerald-600 bg-emerald-100/50 p-1.5 rounded">
                                     Nội dung: {message}
                                 </p>
                             </div>

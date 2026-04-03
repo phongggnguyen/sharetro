@@ -19,7 +19,7 @@
 - **Member Management**: Add group members along with their bank account details to receive money.
 - **Expense Tracking**: Easily log expenses, the total amount, and who paid for it.
 - **Optimized Settlement Algorithm**: Automatically compute balances and generate the simplest money transfer plan to clear debts (using a Greedy Algorithm).
-- **Quick QR Code Payments**: Integrated with **VietQR**, allowing dynamic QR code generation (including the exact amount and memo) with a single tap.
+- **Quick QR Code Payments**: Integrated with **VietQR**, allowing members to set up their own bank details (Bank & Account No). Dynamic QR codes are generated during the settlement process with the exact amount and memo for instant transfers.
 - **Access History**: Automatically saves recently accessed groups in the browser storage for quick retrieval.
 
 ---
@@ -130,7 +130,7 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 -   **Quản Lý Thành Viên**: Thêm thành viên kèm thông tin ngân hàng để nhận tiền.
 -   **Ghi Chép Chi Tiêu**: Nhập khoản chi, số tiền và người đã trả.
 -   **Thuật Toán Tối Ưu**: Tự động tính toán số dư (Balance) và đưa ra kế hoạch chuyển khoản tối giản nhất (Greedy Algorithm).
--   **Thanh Toán Quick QR**: Tích hợp công nghệ **VietQR** giúp tạo mã QR chuyển khoản động (kèm số tiền và nội dung) chỉ bằng một cú chạm.
+-   **Thanh Toán Quick QR**: Tích hợp công nghệ **VietQR**, cho phép thành viên tự thiết lập thông tin ngân hàng (Ngân hàng & STK). Mã QR chuyển khoản động được tạo tự động trong phần chốt sổ với chính xác số tiền và nội dung để chuyển khoản ngay lập tức.
 -   **Lịch Sử Truy Cập**: Tự động lưu các nhóm bạn đã truy cập vào bộ nhớ trình duyệt.
 
 ---
