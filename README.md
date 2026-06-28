@@ -11,10 +11,8 @@
 ## 🚀 Core Features
 
 - **📱 PWA Support**: Install the app directly on your phone's home screen. Basic offline support with cached data access.
-- **📅 Monthly Settlement**:
-  - Automatically settle debits/credits on the 1st of every month.
-  - Keep a detailed settlement history for each cycle.
-  - Start a new settlement cycle with zeroed balances.
+- **📅 Manual Settlement**: The group creator (admin) can manually trigger settlement to clear debts, archive history, and reset balances for a new cycle.
+- **⚡ Database Keep-Alive**: Automatically pings the Supabase database every 5 days via Vercel Cron to prevent the Free Tier project from being paused.
 - **Create & Join Groups**: Quickly create a group and share the ID/link with friends.
 - **Member Management**: Add group members along with their bank account details to receive money.
 - **Expense Tracking**: Easily log expenses, the total amount, and who paid for it.
@@ -30,7 +28,7 @@ Built on modern 2024-2025 web technologies:
 
 - **Framework**: [Next.js 14](https://nextjs.org/) (App Router).
 - **Database / Backend**: [Supabase](https://supabase.com/) (Postgres + Row Level Security).
-- **Automation**: **Vercel Cron Jobs** (For periodic monthly settlements).
+- **Automation**: **Vercel Cron Jobs** (For database keep-alive ping).
 - **PWA**: Service Workers + Web Manifest.
 - **State Management**: [Zustand](https://zustand-demo.pmnd.rs/).
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [Shadcn UI](https://ui.shadcn.com/).
@@ -63,7 +61,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 Execute the SQL script in `docs/supabase-schema.sql` via the Supabase SQL Editor to set up tables (`groups`, `members`, `expenses`, `settlement_history`) and configure Row Level Security (RLS).
 
 ### 5. Cron Job Setup (Production)
-To enable the automated monthly settlement feature, configure a Cron Job in Vercel to ping the `/api/cron/settle` endpoint regularly.
+To prevent the Supabase Free Tier database from being paused due to inactivity, a Vercel Cron Job is configured (via `vercel.json`) to automatically ping the `/api/cron/keep-alive` endpoint every 5 days. Ensure the `CRON_SECRET` environment variable is configured in your Vercel project settings to secure this endpoint.
 
 ### 6. Run the application
 ```bash
@@ -78,7 +76,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ```text
 src/
 ├── app/            # Next.js App Router (Pages, Layout, API)
-│   └── api/cron/   # Periodic settlement logic
+│   └── api/cron/   # Database keep-alive ping route
 ├── components/     # UI Components (PWA, Expenses, Members, etc.)
 ├── lib/            # Business Logic & Utility (calculator.ts)
 ├── store/          # Zustand State Management
@@ -122,10 +120,8 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 ## 🚀 Tính Năng Cốt Lõi
 
 -   **📱 Hỗ Trợ PWA**: Cài đặt ứng dụng trực tiếp lên màn hình chính điện thoại. Hỗ trợ offline cơ bản (truy cập dữ liệu từ bộ nhớ đệm).
--   **📅 Chốt Sổ Theo Kỳ (Monthly Settlement)**:
-    -   Tự động chốt nợ vào ngày 1 hàng tháng.
-    -   Lưu trữ lịch sử chốt sổ chi tiết từng kỳ.
-    -   Bắt đầu kỳ mới với số dư reset về 0.
+-   **📅 Chốt Sổ Thủ Công (Manual Settlement)**: Người tạo nhóm (Admin) có thể chủ động bấm chốt sổ chi tiêu, lưu trữ lịch sử và reset số dư để bắt đầu chu kỳ mới bất kỳ lúc nào.
+-   **⚡ Tự động duy trì Database (Keep-Alive)**: Tự động gửi truy vấn (ping) tới Supabase mỗi 5 ngày một lần thông qua Vercel Cron để giữ dự án luôn hoạt động, không bị khóa do chính sách không hoạt động của gói Free.
 -   **Tạo & Tham Gia Nhóm**: Tạo nhóm nhanh chóng và chia sẻ ID để bạn bè cùng tham gia.
 -   **Quản Lý Thành Viên**: Thêm thành viên kèm thông tin ngân hàng để nhận tiền.
 -   **Ghi Chép Chi Tiêu**: Nhập khoản chi, số tiền và người đã trả.
@@ -141,7 +137,7 @@ Hệ thống được xây dựng trên nền tảng công nghệ hiện đại 
 
 -   **Framework**: [Next.js 14](https://nextjs.org/) (App Router).
 -   **Database / Backend**: [Supabase](https://supabase.com/) (Postgres + RLS).
--   **Automation**: **Vercel Cron Jobs** (Dành cho việc chốt sổ định kỳ).
+-   **Automation**: **Vercel Cron Jobs** (Dành cho việc ping giữ database hoạt động).
 -   **PWA**: Service Workers + Web Manifest.
 -   **State Management**: [Zustand](https://zustand-demo.pmnd.rs/).
 -   **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [Shadcn UI](https://ui.shadcn.com/).
@@ -174,7 +170,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 Chạy file SQL script `docs/supabase-schema.sql` trong SQL Editor của Supabase để tạo bảng (`groups`, `members`, `expenses`, `settlement_history`) và cấu hình RLS.
 
 ### 5. Setup Cron Job (Dành cho Production)
-Để kích hoạt tính năng tự động chốt sổ, hãy cấu hình Cron Job trong Vercel trỏ tới endpoint `/api/cron/settle`.
+Để tránh cơ sở dữ liệu Supabase Free Tier bị tạm dừng do không hoạt động, dự án đã được thiết lập sẵn Vercel Cron Job (trong file `vercel.json`) để tự động ping endpoint `/api/cron/keep-alive` mỗi 5 ngày một lần. Hãy cấu hình biến môi trường `CRON_SECRET` trong cài đặt dự án Vercel của bạn để kích hoạt bảo mật cho endpoint này.
 
 ### 6. Chạy ứng dụng
 ```bash
@@ -189,7 +185,7 @@ Mở [http://localhost:3000](http://localhost:3000) trên trình duyệt của b
 ```text
 src/
 ├── app/            # Next.js App Router (Pages, Layout, API)
-│   └── api/cron/   # Logic chốt sổ định kỳ
+│   └── api/cron/   # Logic ping giữ database hoạt động
 ├── components/     # UI Components (PWA, Expenses, Members, etc.)
 ├── lib/            # Business Logic & Utility (calculator.ts)
 ├── store/          # Zustand State Management
