@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useExpenseStore } from "@/store/useExpenseStore";
-import { Plus, ArrowRight, Clock, Trash2 } from "lucide-react";
+import { Plus, ArrowRight, Clock, Trash2, Home, Loader2, Link2 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 
 const RECENT_KEY = "sharetien_recent_groups";
@@ -92,55 +92,138 @@ export default function HomePage() {
     };
 
     return (
-        <main className="flex min-h-screen flex-col bg-slate-50 text-slate-900 selection:bg-black selection:text-white">
+        <main className="flex min-h-screen flex-col bg-[#141f2e] text-slate-900 selection:bg-black selection:text-white overflow-hidden">
             {/* Hero Header */}
-            <div className="w-full bg-slate-900 text-white p-8 pb-10 border-b-4 border-black">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="bg-white text-slate-900 overflow-hidden flex items-center justify-center p-1.5 border-2 border-white shadow-[4px_4px_0_0_rgba(255,255,255,0.3)] min-w-[3.5rem] min-h-[3.5rem] shrink-0 w-14 h-14">
-                        <Logo className="w-full h-full object-contain" />
-                    </div>
-                    <span className="font-black text-white/60 text-xs uppercase tracking-[0.3em]">No Debt</span>
+            <div className="relative w-full text-white px-6 pt-10 pb-12 overflow-hidden shrink-0">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 z-0">
+                    <div className="absolute top-[-20%] right-[-10%] w-[120%] h-[120%] bg-gradient-to-bl from-white/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
                 </div>
-                <h1 className="text-5xl font-black uppercase tracking-tighter leading-none text-white">
-                    Chia tiền<br />
-                    <span className="text-white/40">thật dễ.</span>
-                </h1>
-                <p className="mt-4 text-white/50 font-bold text-sm uppercase tracking-widest">
-                    Tạo nhóm · Thêm chi phí · Chốt sổ
-                </p>
+                
+                <div className="relative z-10">
+                    <div className="flex items-center gap-4 mb-12">
+                        <div className="bg-white text-slate-900 rounded-[14px] overflow-hidden flex items-center justify-center w-12 h-12 shrink-0 p-2">
+                            <Logo className="w-full h-full object-contain" />
+                        </div>
+                        <div className="h-6 w-[2px] bg-slate-600 rounded-full" />
+                        <span className="font-bold text-white text-[13px] uppercase tracking-[0.2em]">No Debt</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                        <div className="z-10">
+                            <h1 className="text-[2.75rem] font-black uppercase tracking-tight leading-[1.05] text-white mb-3">
+                                CHIA TIỀN<br />
+                                <span className="text-slate-300">THẬT DỄ</span>
+                            </h1>
+                            <p className="text-slate-400 font-bold text-[10px] sm:text-xs uppercase tracking-[0.15em]">
+                                TẠO NHÓM · THÊM CHI PHÍ · CHỐT SỔ
+                            </p>
+                        </div>
+
+                        {/* Illustration */}
+                        <div className="relative w-[110px] h-[110px] shrink-0 flex items-center justify-center -mr-2 opacity-95">
+                            {/* Sparks */}
+                            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100">
+                                {/* Left sparks */}
+                                <path d="M 10 58 L 2 61" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+                                <path d="M 16 45 L 8 39" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+                                {/* Right sparks */}
+                                <path d="M 85 45 L 92 38" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+                                <path d="M 88 55 L 96 53" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+                                {/* Top left motion lines */}
+                                <path d="M 38 32 Q 48 30 58 30" stroke="#64748b" strokeWidth="2" strokeLinecap="round" fill="none" />
+                                <path d="M 32 40 Q 32 30 42 26" stroke="#64748b" strokeWidth="2" strokeLinecap="round" fill="none" />
+                            </svg>
+                            
+                            {/* Document Base */}
+                            <div className="absolute right-7 top-6 w-14 h-[72px] rounded-[10px] border-[2.5px] border-[#64748b] bg-[#141f2e] flex flex-col p-2.5 gap-1.5 rotate-[-8deg]">
+                                <div className="w-8 h-1 bg-[#64748b] rounded-full" />
+                                <div className="w-5 h-1 bg-[#64748b] rounded-full" />
+                                <div className="w-7 h-1 bg-[#64748b] rounded-full" />
+                                <div className="mt-auto font-black text-[#64748b] text-xl leading-none mb-0.5">$</div>
+                            </div>
+                            
+                            {/* Group Circle */}
+                            <div className="absolute right-1 bottom-4 w-[46px] h-[46px] rounded-full border-[2.5px] border-[#64748b] bg-[#141f2e] flex items-center justify-center">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div className="flex-1 p-6 flex flex-col gap-8">
+            <div className="flex-1 bg-white rounded-t-[32px] p-6 pt-8 flex flex-col gap-8 relative z-20">
                 {/* Tạo nhóm mới */}
                 <section>
-                    <h2 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 mb-4 flex items-center gap-2">
-                        <span className="w-4 h-0.5 bg-slate-900 inline-block" />
+                    <h2 className="text-sm font-black uppercase tracking-[0.15em] text-slate-800 mb-4 flex items-center gap-3">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-700">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <line x1="19" y1="8" x2="19" y2="14" />
+                            <line x1="22" y1="11" x2="16" y2="11" />
+                        </svg>
                         Tạo nhóm mới
                     </h2>
                     <form onSubmit={handleCreateGroup} className="flex flex-col gap-3">
-                        <input
-                            type="text"
-                            placeholder="VD: Trọ Quận 7, Du lịch Đà Lạt..."
-                            value={groupName}
-                            onChange={(e) => setGroupName(e.target.value)}
-                            className="h-14 w-full bg-white border-2 border-slate-900 px-4 text-base font-bold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-[4px_4px_0_0_rgba(15,23,42,1)] focus:outline-none focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all rounded-none"
-                            disabled={isCreating}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Tên của bạn (Người tạo nhóm)..."
-                            value={creatorName}
-                            onChange={(e) => setCreatorName(e.target.value)}
-                            className="h-14 w-full bg-white border-2 border-slate-900 px-4 text-base font-bold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-[4px_4px_0_0_rgba(15,23,42,1)] focus:outline-none focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all rounded-none"
-                            disabled={isCreating}
-                        />
+                        {/* Input: Tên nhóm */}
+                        <div className="relative">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                <Home className="w-4 h-4 text-slate-400" />
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="VD: Trọ Quận 7, Du lịch Đà Lạt..."
+                                value={groupName}
+                                onChange={(e) => setGroupName(e.target.value)}
+                                className="h-14 w-full bg-white border-2 border-slate-900 pl-11 pr-4 text-base font-bold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-[4px_4px_0_0_rgba(15,23,42,1)] focus:outline-none focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all rounded-none"
+                                disabled={isCreating}
+                            />
+                        </div>
+                        {/* Input: Tên người tạo */}
+                        <div className="relative">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                                {/* Cat face icon */}
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    {/* Left ear */}
+                                    <path d="M4 6 L4 2 L8 5" />
+                                    {/* Right ear */}
+                                    <path d="M20 6 L20 2 L16 5" />
+                                    {/* Head circle */}
+                                    <circle cx="12" cy="12" r="8" />
+                                    {/* Left eye */}
+                                    <circle cx="9.5" cy="10.5" r="1" fill="currentColor" stroke="none" />
+                                    {/* Right eye */}
+                                    <circle cx="14.5" cy="10.5" r="1" fill="currentColor" stroke="none" />
+                                    {/* Nose */}
+                                    <path d="M11.5 14 L12 13.5 L12.5 14" />
+                                    {/* Mouth */}
+                                    <path d="M11.5 14 Q12 15 12.5 14" />
+                                </svg>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Tên của bạn (Người tạo nhóm)..."
+                                value={creatorName}
+                                onChange={(e) => setCreatorName(e.target.value)}
+                                className="h-14 w-full bg-white border-2 border-slate-900 pl-11 pr-4 text-base font-bold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-[4px_4px_0_0_rgba(15,23,42,1)] focus:outline-none focus:shadow-none focus:translate-x-1 focus:translate-y-1 transition-all rounded-none"
+                                disabled={isCreating}
+                            />
+                        </div>
                         <button
                             type="submit"
                             disabled={isCreating || !groupName.trim()}
                             className="h-14 w-full bg-slate-900 text-white font-black uppercase tracking-widest text-sm border-2 border-slate-900 shadow-[4px_4px_0_0_rgba(15,23,42,0.3)] hover:shadow-[6px_6px_0_0_rgba(15,23,42,0.4)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-x-0 disabled:translate-y-0"
                         >
                             {isCreating ? (
-                                <span className="animate-pulse">Đang tạo...</span>
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <span>Đang tạo...</span>
+                                </>
                             ) : (
                                 <>
                                     <Plus className="w-5 h-5" />
@@ -191,18 +274,23 @@ export default function HomePage() {
 
                 {/* Vào nhóm bằng ID / Link */}
                 <section>
-                    <h2 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 mb-4 flex items-center gap-2">
-                        <span className="w-4 h-0.5 bg-slate-400 inline-block" />
+                    <h2 className="text-sm font-black uppercase tracking-[0.15em] text-slate-800 mb-4 flex items-center gap-3">
+                        <Link2 className="w-4 h-4 text-slate-700" />
                         Vào nhóm bằng ID / Link
                     </h2>
                     <form onSubmit={handleJoinGroup} className="flex gap-2">
-                        <input
-                            type="text"
-                            placeholder="Dán ID hoặc Link nhóm vào đây..."
-                            value={joinId}
-                            onChange={(e) => setJoinId(e.target.value)}
-                            className="flex-1 h-12 bg-white border-2 border-slate-300 px-4 text-sm font-bold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-[3px_3px_0_0_rgba(15,23,42,0.2)] focus:outline-none focus:border-slate-900 focus:shadow-[3px_3px_0_0_rgba(15,23,42,0.8)] transition-all rounded-none"
-                        />
+                        <div className="relative flex-1">
+                            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
+                                <Link2 className="w-4 h-4 text-slate-400" />
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Dán ID hoặc Link nhóm vào đây..."
+                                value={joinId}
+                                onChange={(e) => setJoinId(e.target.value)}
+                                className="h-12 w-full bg-white border-2 border-slate-300 pl-10 pr-4 text-sm font-bold text-slate-900 placeholder:text-slate-400 placeholder:font-medium shadow-[3px_3px_0_0_rgba(15,23,42,0.2)] focus:outline-none focus:border-slate-900 focus:shadow-[3px_3px_0_0_rgba(15,23,42,0.8)] transition-all rounded-none"
+                            />
+                        </div>
                         <button
                             type="submit"
                             disabled={!joinId.trim()}
@@ -213,13 +301,12 @@ export default function HomePage() {
                         </button>
                     </form>
                 </section>
-            </div>
-
-            {/* Footer */}
-            <div className="p-6 border-t-2 border-slate-100">
-                <p className="text-center text-xs text-slate-400 font-bold uppercase tracking-widest">
-                    No Debt · Swiss Minimalist Design
-                </p>
+                {/* Footer */}
+                <div className="pt-2 pb-2 border-t border-slate-100 mt-auto">
+                    <p className="text-center text-xs text-slate-400 font-bold uppercase tracking-widest">
+                        No Debt · Swiss Minimalist Design
+                    </p>
+                </div>
             </div>
 
             {/* JSON-LD Schema */}
