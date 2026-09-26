@@ -71,7 +71,7 @@ export default function HomePage() {
                     return;
                 }
             }
-            
+
             // Nếu người dùng dán đường dẫn tương đối
             if (input.startsWith("/group/")) {
                 router.push(input);
@@ -99,7 +99,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 z-0">
                     <div className="absolute top-[-20%] right-[-10%] w-[120%] h-[120%] bg-gradient-to-bl from-white/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
                 </div>
-                
+
                 <div className="relative z-10">
                     <div className="flex items-center gap-4 mb-12">
                         <div className="bg-white text-slate-900 rounded-[14px] overflow-hidden flex items-center justify-center w-12 h-12 shrink-0 p-2">
@@ -108,7 +108,7 @@ export default function HomePage() {
                         <div className="h-6 w-[2px] bg-slate-600 rounded-full" />
                         <span className="font-bold text-white text-[13px] uppercase tracking-[0.2em]">No Debt</span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                         <div className="z-10">
                             <h1 className="text-[2.75rem] font-black uppercase tracking-tight leading-[1.05] text-white mb-3">
@@ -134,7 +134,7 @@ export default function HomePage() {
                                 <path d="M 38 32 Q 48 30 58 30" stroke="#64748b" strokeWidth="2" strokeLinecap="round" fill="none" />
                                 <path d="M 32 40 Q 32 30 42 26" stroke="#64748b" strokeWidth="2" strokeLinecap="round" fill="none" />
                             </svg>
-                            
+
                             {/* Document Base */}
                             <div className="absolute right-7 top-6 w-14 h-[72px] rounded-[10px] border-[2.5px] border-[#64748b] bg-[#141f2e] flex flex-col p-2.5 gap-1.5 rotate-[-8deg]">
                                 <div className="w-8 h-1 bg-[#64748b] rounded-full" />
@@ -142,7 +142,7 @@ export default function HomePage() {
                                 <div className="w-7 h-1 bg-[#64748b] rounded-full" />
                                 <div className="mt-auto font-black text-[#64748b] text-xl leading-none mb-0.5">$</div>
                             </div>
-                            
+
                             {/* Group Circle */}
                             <div className="absolute right-1 bottom-4 w-[46px] h-[46px] rounded-full border-[2.5px] border-[#64748b] bg-[#141f2e] flex items-center justify-center">
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -306,6 +306,12 @@ export default function HomePage() {
                     <p className="text-center text-xs text-slate-400 font-bold uppercase tracking-widest">
                         No Debt · Swiss Minimalist Design
                     </p>
+                    <a
+                        // href="mailto:nchd3012@gmail.com"
+                        className="block text-center text-xs text-slate-400 hover:text-slate-600 transition-colors mt-1 font-mono"
+                    >
+                        📬nchd3012@gmail.com
+                    </a>
                 </div>
             </div>
 
