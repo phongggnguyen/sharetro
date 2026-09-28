@@ -104,7 +104,7 @@ export default function HomePage() {
                         width={1491}
                         height={1055}
                         priority
-                        className="w-full h-full object-contain drop-shadow-[0_8px_12px_rgba(0,0,0,0.4)]"
+                        className="w-full h-full object-contain drop-shadow-[0_-2px_3px_rgba(147,197,253,0.32)] drop-shadow-[0_5px_5px_rgba(3,10,22,0.42)] drop-shadow-[0_16px_14px_rgba(3,10,22,0.46)] drop-shadow-[0_30px_22px_rgba(3,10,22,0.24)]"
                     />
                 </div>
 
