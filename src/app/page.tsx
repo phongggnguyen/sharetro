@@ -92,72 +92,76 @@ export default function HomePage() {
     };
 
     return (
-        <main className="flex min-h-screen flex-col bg-[#141f2e] text-slate-900 selection:bg-black selection:text-white overflow-hidden">
+        <main className="flex min-h-screen flex-col bg-[#eaf0f8] text-slate-900 selection:bg-black selection:text-white overflow-hidden">
             {/* Hero Header */}
-            <div className="relative w-full text-white px-6 pt-10 pb-12 overflow-hidden shrink-0">
-                {/* Decorative Background Pattern */}
-                <div className="absolute inset-0 z-0">
-                    <div className="absolute top-[-20%] right-[-10%] w-[120%] h-[120%] bg-gradient-to-bl from-white/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
-                </div>
-
-                <div className="relative z-10">
-                    <div className="flex items-center gap-4 mb-12">
-                        <div className="bg-white text-slate-900 rounded-[14px] overflow-hidden flex items-center justify-center w-12 h-12 shrink-0 p-2">
-                            <Logo className="w-full h-full object-contain" />
-                        </div>
-                        <div className="h-6 w-[2px] bg-slate-600 rounded-full" />
-                        <span className="font-bold text-white text-[13px] uppercase tracking-[0.2em]">No Debt</span>
+            <div className="relative w-full px-5 pt-8 pb-8 shrink-0">
+                <div className="relative bg-[#253850] rounded-[28px] p-6 pb-7 shadow-[0_10px_0_0_#142031,0_20px_25px_-5px_rgba(0,0,0,0.3)] border-t-[2px] border-l-[2px] border-[#50729e] overflow-visible">
+                    {/* Decorative Background Pattern */}
+                    <div className="absolute inset-0 z-0 overflow-hidden rounded-[28px]">
+                        <div className="absolute top-[-20%] right-[-10%] w-[120%] h-[120%] bg-gradient-to-bl from-white/[0.08] to-transparent rounded-full blur-3xl pointer-events-none" />
                     </div>
 
-                    <div className="flex items-center justify-between">
-                        <div className="z-10">
-                            <h1 className="text-[2.75rem] font-black uppercase tracking-tight leading-[1.05] text-white mb-3">
-                                CHIA TIỀN<br />
-                                <span className="text-slate-300">THẬT DỄ</span>
-                            </h1>
-                            <p className="text-slate-400 font-bold text-[10px] sm:text-xs uppercase tracking-[0.15em]">
-                                TẠO NHÓM · THÊM CHI PHÍ · CHỐT SỔ
-                            </p>
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-3 mb-8">
+                            <div className="bg-white text-slate-900 rounded-[12px] overflow-hidden flex items-center justify-center w-10 h-10 shrink-0 p-1.5 shadow-[0_3px_0_0_rgba(0,0,0,0.2)]">
+                                <Logo className="w-full h-full object-contain" />
+                            </div>
+                            <span className="font-bold text-[#8ba3c5] text-[11px] uppercase tracking-[0.2em] [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">No Debt</span>
                         </div>
 
-                        {/* Illustration */}
-                        <div className="relative w-[110px] h-[110px] shrink-0 flex items-center justify-center -mr-2 opacity-95">
-                            {/* Sparks */}
-                            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100">
-                                {/* Left sparks */}
-                                <path d="M 10 58 L 2 61" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
-                                <path d="M 16 45 L 8 39" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
-                                {/* Right sparks */}
-                                <path d="M 85 45 L 92 38" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
-                                <path d="M 88 55 L 96 53" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
-                                {/* Top left motion lines */}
-                                <path d="M 38 32 Q 48 30 58 30" stroke="#64748b" strokeWidth="2" strokeLinecap="round" fill="none" />
-                                <path d="M 32 40 Q 32 30 42 26" stroke="#64748b" strokeWidth="2" strokeLinecap="round" fill="none" />
-                            </svg>
-
-                            {/* Document Base */}
-                            <div className="absolute right-7 top-6 w-14 h-[72px] rounded-[10px] border-[2.5px] border-[#64748b] bg-[#141f2e] flex flex-col p-2.5 gap-1.5 rotate-[-8deg]">
-                                <div className="w-8 h-1 bg-[#64748b] rounded-full" />
-                                <div className="w-5 h-1 bg-[#64748b] rounded-full" />
-                                <div className="w-7 h-1 bg-[#64748b] rounded-full" />
-                                <div className="mt-auto font-black text-[#64748b] text-xl leading-none mb-0.5">$</div>
+                        <div className="flex items-center justify-between">
+                            <div className="z-10">
+                                <h1 className="text-[2.5rem] sm:text-[2.75rem] font-black uppercase tracking-tight leading-[1.1] mb-4">
+                                    <span className="block text-white [text-shadow:0_1px_0_#cbd5e1,0_2px_0_#b4c5d6,0_3px_0_#94a3b8,0_4px_0_#8295ac,0_5px_0_#64748b,0_6px_0_#4f6075,0_8px_10px_rgba(0,0,0,0.5)] mb-2">
+                                        CHIA TIỀN
+                                    </span>
+                                    <span className="block text-[#70b0ff] [text-shadow:0_1px_0_#4b8df0,0_2px_0_#3b82f6,0_3px_0_#2a73eb,0_4px_0_#1d64d8,0_5px_0_#1855be,0_6px_0_#134499,0_8px_10px_rgba(0,0,0,0.5)]">
+                                        THẬT DỄ
+                                    </span>
+                                </h1>
+                                <p className="text-[#8ba3c5] font-bold text-[10px] sm:text-[11px] uppercase tracking-[0.15em] [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">
+                                    TẠO NHÓM · THÊM CHI PHÍ · CHỐT SỔ
+                                </p>
                             </div>
 
-                            {/* Group Circle */}
-                            <div className="absolute right-1 bottom-4 w-[46px] h-[46px] rounded-full border-[2.5px] border-[#64748b] bg-[#141f2e] flex items-center justify-center">
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                    <circle cx="9" cy="7" r="4" />
-                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            {/* Illustration */}
+                            <div className="relative w-[110px] h-[110px] shrink-0 flex items-center justify-center -mr-2 opacity-95">
+                                {/* Sparks */}
+                                <svg className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)]" viewBox="0 0 100 100">
+                                    {/* Left sparks */}
+                                    <path d="M 14 62 L 4 66" stroke="#fbbf24" strokeWidth="3.5" strokeLinecap="round" />
+                                    <path d="M 18 45 L 10 37" stroke="#fbbf24" strokeWidth="3.5" strokeLinecap="round" />
+                                    {/* Right sparks */}
+                                    <path d="M 85 45 L 94 36" stroke="#fbbf24" strokeWidth="3.5" strokeLinecap="round" />
+                                    <path d="M 88 58 L 98 56" stroke="#fbbf24" strokeWidth="3.5" strokeLinecap="round" />
                                 </svg>
+
+                                {/* Document Base */}
+                                <div className="absolute right-7 top-6 w-[60px] h-[76px] rounded-[12px] bg-[#224172] border-t-[2px] border-l-[2px] border-[#4f7ebd] shadow-[0_6px_0_0_#142b52,0_10px_10px_rgba(0,0,0,0.3)] flex flex-col p-2.5 gap-1.5 rotate-[-8deg]">
+                                    <div className="w-8 h-1 bg-[#88aae0] rounded-full shadow-[0_1px_0_0_rgba(0,0,0,0.2)]" />
+                                    <div className="w-5 h-1 bg-[#88aae0] rounded-full shadow-[0_1px_0_0_rgba(0,0,0,0.2)]" />
+                                    <div className="w-7 h-1 bg-[#88aae0] rounded-full shadow-[0_1px_0_0_rgba(0,0,0,0.2)]" />
+                                    <div className="mt-auto font-black text-[#60a5fa] text-[22px] leading-none mb-0.5 [text-shadow:0_2px_0_#1e3a8a]">
+                                        $
+                                    </div>
+                                </div>
+
+                                {/* Group Circle */}
+                                <div className="absolute right-0 bottom-4 w-[52px] h-[52px] rounded-full bg-[#2e4a6a] border-t-[2px] border-l-[2px] border-[#5578a1] shadow-[0_5px_0_0_#1a2a40,0_8px_10px_rgba(0,0,0,0.3)] flex items-center justify-center">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_2px_0_#1e3a8a]">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="flex-1 bg-white rounded-t-[32px] p-6 pt-8 flex flex-col gap-8 relative z-20">
+            <div className="flex-1 bg-white rounded-t-[32px] p-6 pt-8 flex flex-col gap-8 relative z-20 shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.05)]">
                 {/* Tạo nhóm mới */}
                 <section>
                     <h2 className="text-sm font-black uppercase tracking-[0.15em] text-slate-800 mb-4 flex items-center gap-3">
