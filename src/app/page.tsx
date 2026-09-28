@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useExpenseStore } from "@/store/useExpenseStore";
 import { Plus, ArrowRight, Clock, Trash2, Home, Loader2, Link2 } from "lucide-react";
 import { Logo } from "@/components/Logo";
+import Image from "next/image";
 
 const RECENT_KEY = "sharetien_recent_groups";
 
@@ -92,10 +93,22 @@ export default function HomePage() {
     };
 
     return (
-        <main className="flex min-h-screen flex-col bg-[#eaf0f8] text-slate-900 selection:bg-black selection:text-white overflow-hidden">
+        <main className="flex min-h-screen flex-col bg-[#eaf0f8] text-slate-900 selection:bg-black selection:text-white overflow-x-hidden">
             {/* Hero Header */}
-            <div className="relative w-full px-5 pt-8 pb-8 shrink-0">
-                <div className="relative bg-[#253850] rounded-[28px] p-6 pb-7 shadow-[0_10px_0_0_#142031,0_20px_25px_-5px_rgba(0,0,0,0.3)] border-t-[2px] border-l-[2px] border-[#50729e] overflow-visible">
+            <div className="relative w-full px-5 pt-16 pb-8 shrink-0">
+                {/* Cat mascot — positioned relative to outer wrapper so it sits above the card in page bg */}
+                <div className="absolute -top-1 right-3 sm:right-5 w-[145px] h-[112px] sm:w-[205px] sm:h-[158px] z-20 pointer-events-none select-none">
+                    <Image
+                        src="/img_meo.png"
+                        alt="Mèo tính tiền"
+                        width={1491}
+                        height={1055}
+                        priority
+                        className="w-full h-full object-contain drop-shadow-[0_8px_12px_rgba(0,0,0,0.4)]"
+                    />
+                </div>
+
+                <div className="relative bg-[#253850] rounded-[28px] p-6 pb-7 shadow-[0_10px_0_0_#142031,0_20px_25px_-5px_rgba(0,0,0,0.3)] border-t-[2px] border-l-[2px] border-[#50729e]">
                     {/* Decorative Background Pattern */}
                     <div className="absolute inset-0 z-0 overflow-hidden rounded-[28px]">
                         <div className="absolute top-[-20%] right-[-10%] w-[120%] h-[120%] bg-gradient-to-bl from-white/[0.08] to-transparent rounded-full blur-3xl pointer-events-none" />
@@ -109,8 +122,8 @@ export default function HomePage() {
                             <span className="font-bold text-[#8ba3c5] text-[11px] uppercase tracking-[0.2em] [text-shadow:0_1px_1px_rgba(0,0,0,0.3)]">No Debt</span>
                         </div>
 
-                        <div className="flex items-center justify-between">
-                            <div className="z-10">
+                        <div className="flex items-end justify-between">
+                            <div className="z-10 flex-1 pr-1 sm:pr-0">
                                 <h1 className="text-[2.5rem] sm:text-[2.75rem] font-black uppercase tracking-tight leading-[1.1] mb-4">
                                     <span className="block text-white [text-shadow:0_1px_0_#cbd5e1,0_2px_0_#b4c5d6,0_3px_0_#94a3b8,0_4px_0_#8295ac,0_5px_0_#64748b,0_6px_0_#4f6075,0_8px_10px_rgba(0,0,0,0.5)] mb-2">
                                         CHIA TIỀN
@@ -124,19 +137,17 @@ export default function HomePage() {
                                 </p>
                             </div>
 
-                            {/* Illustration */}
-                            <div className="relative w-[110px] h-[110px] shrink-0 flex items-center justify-center -mr-2 opacity-95">
+                            {/* Bottom-right illustration: doc + group icons */}
+                            <div className="relative w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] shrink-0 flex items-center justify-center -mr-2 opacity-95">
                                 {/* Sparks */}
                                 <svg className="absolute inset-0 w-full h-full pointer-events-none drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)]" viewBox="0 0 100 100">
-                                    {/* Left sparks */}
                                     <path d="M 14 62 L 4 66" stroke="#fbbf24" strokeWidth="3.5" strokeLinecap="round" />
                                     <path d="M 18 45 L 10 37" stroke="#fbbf24" strokeWidth="3.5" strokeLinecap="round" />
-                                    {/* Right sparks */}
                                     <path d="M 85 45 L 94 36" stroke="#fbbf24" strokeWidth="3.5" strokeLinecap="round" />
                                     <path d="M 88 58 L 98 56" stroke="#fbbf24" strokeWidth="3.5" strokeLinecap="round" />
                                 </svg>
 
-                                {/* Document Base */}
+                                {/* Document card */}
                                 <div className="absolute right-7 top-6 w-[60px] h-[76px] rounded-[12px] bg-[#224172] border-t-[2px] border-l-[2px] border-[#4f7ebd] shadow-[0_6px_0_0_#142b52,0_10px_10px_rgba(0,0,0,0.3)] flex flex-col p-2.5 gap-1.5 rotate-[-8deg]">
                                     <div className="w-8 h-1 bg-[#88aae0] rounded-full shadow-[0_1px_0_0_rgba(0,0,0,0.2)]" />
                                     <div className="w-5 h-1 bg-[#88aae0] rounded-full shadow-[0_1px_0_0_rgba(0,0,0,0.2)]" />
@@ -146,7 +157,7 @@ export default function HomePage() {
                                     </div>
                                 </div>
 
-                                {/* Group Circle */}
+                                {/* Group circle */}
                                 <div className="absolute right-0 bottom-4 w-[52px] h-[52px] rounded-full bg-[#2e4a6a] border-t-[2px] border-l-[2px] border-[#5578a1] shadow-[0_5px_0_0_#1a2a40,0_8px_10px_rgba(0,0,0,0.3)] flex items-center justify-center">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_2px_0_#1e3a8a]">
                                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
@@ -342,3 +353,4 @@ export default function HomePage() {
         </main>
     );
 }
+
